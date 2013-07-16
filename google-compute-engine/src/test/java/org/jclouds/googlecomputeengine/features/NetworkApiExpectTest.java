@@ -41,7 +41,7 @@ import static org.testng.AssertJUnit.assertNull;
 @Test(groups = "unit")
 public class NetworkApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
 
-   static final String NETWORKS_RESOURCE_URL = MYPROJECT_BASE_URL + "/networks";
+   public static final String NETWORKS_RESOURCE_URL = MYPROJECT_BASE_URL + "/networks";
 
    public static final HttpRequest GET_NETWORK_REQUEST = HttpRequest
            .builder()

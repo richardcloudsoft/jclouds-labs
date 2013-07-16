@@ -28,7 +28,10 @@ import org.jclouds.compute.domain.Template;
 import org.jclouds.domain.Location;
 import org.jclouds.googlecomputeengine.compute.options.GoogleComputeEngineTemplateOptions;
 import org.jclouds.googlecomputeengine.domain.Instance;
+import org.jclouds.googlecomputeengine.features.FirewallApiExpectTest;
+import org.jclouds.googlecomputeengine.features.ImageApiExpectTest;
 import org.jclouds.googlecomputeengine.features.InstanceApiExpectTest;
+import org.jclouds.googlecomputeengine.features.NetworkApiExpectTest;
 import org.jclouds.googlecomputeengine.internal.BaseGoogleComputeEngineServiceExpectTest;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
@@ -70,7 +73,7 @@ public class GoogleComputeEngineServiceExpectTest extends BaseGoogleComputeEngin
    public static final HttpRequest LIST_GOOGLE_IMAGES_REQUEST = HttpRequest
            .builder()
            .method("GET")
-           .endpoint("https://www.googleapis.com/compute/v1beta13/projects/google/images")
+           .endpoint(ImageApiExpectTest.GOOGLE_IMAGES_RESOURCE_URL)
            .addHeader("Accept", "application/json")
            .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -80,7 +83,7 @@ public class GoogleComputeEngineServiceExpectTest extends BaseGoogleComputeEngin
    private HttpRequest INSERT_NETWORK_REQUEST = HttpRequest
            .builder()
            .method("POST")
-           .endpoint("https://www.googleapis.com/compute/v1beta13/projects/myproject/networks")
+           .endpoint(NetworkApiExpectTest.NETWORKS_RESOURCE_URL)
            .addHeader("Accept", "application/json")
            .addHeader("Authorization", "Bearer " + TOKEN)
            .payload(payloadFromStringWithContentType("{\"name\":\"jclouds-test\",\"IPv4Range\":\"10.0.0.0/8\"}",
@@ -90,7 +93,7 @@ public class GoogleComputeEngineServiceExpectTest extends BaseGoogleComputeEngin
    private HttpRequest INSERT_FIREWALL_REQUEST = HttpRequest
            .builder()
            .method("POST")
-           .endpoint("https://www.googleapis.com/compute/v1beta13/projects/myproject/firewalls")
+           .endpoint(FirewallApiExpectTest.FIREWALLS_RESOURCE_URL)
            .addHeader("Accept", "application/json")
            .addHeader("Authorization", "Bearer " + TOKEN)
            .payload(payloadFromStringWithContentType("{\"name\":\"jclouds-test\",\"network\":\"https://www.googleapis" +
@@ -152,7 +155,7 @@ public class GoogleComputeEngineServiceExpectTest extends BaseGoogleComputeEngin
       return HttpRequest
               .builder()
               .method("POST")
-              .endpoint("https://www.googleapis.com/compute/v1beta13/projects/myproject/instances")
+              .endpoint(InstanceApiExpectTest.INSTANCE_RESOURCE_URL)
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN)
               .payload(payloadFromStringWithContentType("{\"name\":\"" + instanceName + "\"," +
@@ -176,8 +179,7 @@ public class GoogleComputeEngineServiceExpectTest extends BaseGoogleComputeEngin
       return HttpRequest
               .builder()
               .method("GET")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/instances/" + instanceName)
+              .endpoint(InstanceApiExpectTest.INSTANCE_RESOURCE_URL + "/" + instanceName)
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
    }
@@ -231,22 +233,19 @@ public class GoogleComputeEngineServiceExpectTest extends BaseGoogleComputeEngin
 
       HttpRequest deleteNodeRequest = HttpRequest.builder()
               .method("DELETE")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/instances/test-delete-networks")
+              .endpoint(InstanceApiExpectTest.INSTANCE_RESOURCE_URL + "/test-delete-networks")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
       HttpRequest deleteFirewallRequest = HttpRequest.builder()
               .method("DELETE")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/firewalls/jclouds-test-delete")
+              .endpoint(FirewallApiExpectTest.FIREWALLS_RESOURCE_URL + "/jclouds-test-delete")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
       HttpRequest deleteNetworkReqquest = HttpRequest.builder()
               .method("DELETE")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/networks/jclouds-test-delete")
+              .endpoint(NetworkApiExpectTest.NETWORKS_RESOURCE_URL + "/jclouds-test-delete")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 

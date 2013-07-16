@@ -46,7 +46,7 @@ import static org.testng.AssertJUnit.assertNull;
 @Test(groups = "unit")
 public class InstanceApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
 
-   static final String INSTANCE_RESOURCE_URL = MYPROJECT_BASE_URL + "/instances";
+   public static final String INSTANCE_RESOURCE_URL = MYPROJECT_BASE_URL + "/instances";
 
    public static final HttpRequest GET_INSTANCE_REQUEST = HttpRequest
            .builder()
