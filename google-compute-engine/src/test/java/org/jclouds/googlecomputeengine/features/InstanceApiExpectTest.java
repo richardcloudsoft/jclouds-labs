@@ -46,11 +46,12 @@ import static org.testng.AssertJUnit.assertNull;
 @Test(groups = "unit")
 public class InstanceApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
 
+   static final String INSTANCE_RESOURCE_URL = MYPROJECT_BASE_URL + "/instances";
+
    public static final HttpRequest GET_INSTANCE_REQUEST = HttpRequest
            .builder()
            .method("GET")
-           .endpoint("https://www.googleapis" +
-                   ".com/compute/v1beta13/projects/myproject/instances/test-1")
+           .endpoint(INSTANCE_RESOURCE_URL + "/test-1")
            .addHeader("Accept", "application/json")
            .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -61,8 +62,7 @@ public class InstanceApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
    public static final HttpRequest LIST_INSTANCES_REQUEST = HttpRequest
            .builder()
            .method("GET")
-           .endpoint("https://www.googleapis" +
-                   ".com/compute/v1beta13/projects/myproject/instances")
+           .endpoint(INSTANCE_RESOURCE_URL)
            .addHeader("Accept", "application/json")
            .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -96,8 +96,7 @@ public class InstanceApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
       HttpRequest get = HttpRequest
               .builder()
               .method("GET")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/instances/test-1/serialPort")
+              .endpoint(INSTANCE_RESOURCE_URL + "/test-1/serialPort")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -115,7 +114,7 @@ public class InstanceApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
       HttpRequest insert = HttpRequest
               .builder()
               .method("POST")
-              .endpoint("https://www.googleapis.com/compute/v1beta13/projects/myproject/instances")
+              .endpoint(INSTANCE_RESOURCE_URL)
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN)
               .payload(payloadFromResourceWithContentType("/instance_insert_simple.json", MediaType.APPLICATION_JSON))
@@ -126,8 +125,7 @@ public class InstanceApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
               CREATE_INSTANCE_RESPONSE).getInstanceApiForProject("myproject");
 
       InstanceTemplate options = InstanceTemplate.builder().forMachineType("n1-standard-1")
-              .addNetworkInterface(URI.create("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/networks/default"));
+              .addNetworkInterface(URI.create(NetworkApiExpectTest.NETWORKS_RESOURCE_URL + "/default"));
 
       assertEquals(api.createInZone("test-1", options, "us-central1-a"), new ParseOperationTest().expected());
    }
@@ -136,7 +134,7 @@ public class InstanceApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
       HttpRequest insert = HttpRequest
               .builder()
               .method("POST")
-              .endpoint("https://www.googleapis.com/compute/v1beta13/projects/myproject/instances")
+              .endpoint(INSTANCE_RESOURCE_URL)
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN)
               .payload(payloadFromResourceWithContentType("/instance_insert.json", MediaType.APPLICATION_JSON))
@@ -149,13 +147,11 @@ public class InstanceApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
               TOKEN_RESPONSE, insert, insertInstanceResponse).getInstanceApiForProject("myproject");
 
       InstanceTemplate options = InstanceTemplate.builder().forMachineType("n1-standard-1")
-              .addNetworkInterface(URI.create("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/networks/default"), Instance.NetworkInterface.AccessConfig.Type.ONE_TO_ONE_NAT)
+              .addNetworkInterface(URI.create(NetworkApiExpectTest.NETWORKS_RESOURCE_URL + "/default"), Instance.NetworkInterface.AccessConfig.Type.ONE_TO_ONE_NAT)
               .description("desc")
-              .image(URI.create("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/google/images/gcel-12-04-v20121106"))
+              .image(URI.create(ImageApiExpectTest.GOOGLE_IMAGES_RESOURCE_URL + "/gcel-12-04-v20121106"))
               .addDisk(InstanceTemplate.PersistentDisk.Mode.READ_WRITE,
-                      create("https://www.googleapis.com/compute/v1beta13/projects/myproject/disks/test"))
+                      create(DiskApiExpectTest.DISKS_RESOURCE_URL + "/test"))
               .addTag("aTag")
               .addServiceAccount(Instance.ServiceAccount.builder().email("default").addScopes("myscope").build())
               .addMetadata("aKey", "aValue");
@@ -168,8 +164,7 @@ public class InstanceApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
       HttpRequest delete = HttpRequest
               .builder()
               .method("DELETE")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/instances/test-1")
+              .endpoint(INSTANCE_RESOURCE_URL + "/test-1")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -187,8 +182,7 @@ public class InstanceApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
       HttpRequest delete = HttpRequest
               .builder()
               .method("DELETE")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/instances/test-1")
+              .endpoint(INSTANCE_RESOURCE_URL + "/test-1")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -214,8 +208,7 @@ public class InstanceApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
       HttpRequest list = HttpRequest
               .builder()
               .method("GET")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/instances")
+              .endpoint(INSTANCE_RESOURCE_URL)
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 

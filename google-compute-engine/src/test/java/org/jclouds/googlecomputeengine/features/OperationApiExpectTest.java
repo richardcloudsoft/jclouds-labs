@@ -39,13 +39,12 @@ import static org.testng.Assert.assertTrue;
 @Test(groups = "unit")
 public class OperationApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
 
-   private static final String OPERATIONS_URL_PREFIX = "https://www.googleapis" +
-           ".com/compute/v1beta13/projects/myproject/operations";
+   static final String OPERATIONS_RESOURCE_URL = MYPROJECT_BASE_URL + "/operations";
 
    public static final HttpRequest GET_OPERATION_REQUEST = HttpRequest
            .builder()
            .method("GET")
-           .endpoint(OPERATIONS_URL_PREFIX + "/operation-1354084865060-4cf88735faeb8-bbbb12cb")
+           .endpoint(OPERATIONS_RESOURCE_URL + "/operation-1354084865060-4cf88735faeb8-bbbb12cb")
            .addHeader("Accept", "application/json")
            .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -75,7 +74,7 @@ public class OperationApiExpectTest extends BaseGoogleComputeEngineApiExpectTest
       HttpRequest delete = HttpRequest
               .builder()
               .method("DELETE")
-              .endpoint(OPERATIONS_URL_PREFIX + "/operation-1352178598164-4cdcc9d031510-4aa46279")
+              .endpoint(OPERATIONS_RESOURCE_URL + "/operation-1352178598164-4cdcc9d031510-4aa46279")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
       HttpResponse operationResponse = HttpResponse.builder().statusCode(204).build();
@@ -90,7 +89,7 @@ public class OperationApiExpectTest extends BaseGoogleComputeEngineApiExpectTest
       HttpRequest delete = HttpRequest
               .builder()
               .method("DELETE")
-              .endpoint(OPERATIONS_URL_PREFIX + "/operation-1352178598164-4cdcc9d031510-4aa46279")
+              .endpoint(OPERATIONS_RESOURCE_URL + "/operation-1352178598164-4cdcc9d031510-4aa46279")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
       HttpResponse operationResponse = HttpResponse.builder().statusCode(404).build();
@@ -105,7 +104,7 @@ public class OperationApiExpectTest extends BaseGoogleComputeEngineApiExpectTest
       HttpRequest get = HttpRequest
               .builder()
               .method("GET")
-              .endpoint(OPERATIONS_URL_PREFIX)
+              .endpoint(OPERATIONS_RESOURCE_URL)
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -123,7 +122,7 @@ public class OperationApiExpectTest extends BaseGoogleComputeEngineApiExpectTest
       HttpRequest get = HttpRequest
               .builder()
               .method("GET")
-              .endpoint(OPERATIONS_URL_PREFIX +
+              .endpoint(OPERATIONS_RESOURCE_URL +
                       "?pageToken=CglPUEVSQVRJT04SOzU5MDQyMTQ4Nzg1Mi5vcG" +
                       "VyYXRpb24tMTM1MjI0NDI1ODAzMC00Y2RkYmU2YTJkNmIwLWVkMzIyMzQz&" +
                       "filter=" +
@@ -148,7 +147,7 @@ public class OperationApiExpectTest extends BaseGoogleComputeEngineApiExpectTest
       HttpRequest get = HttpRequest
               .builder()
               .method("GET")
-              .endpoint(OPERATIONS_URL_PREFIX)
+              .endpoint(OPERATIONS_RESOURCE_URL)
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 

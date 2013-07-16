@@ -42,11 +42,13 @@ import static org.testng.AssertJUnit.assertNull;
 @Test(groups = "unit")
 public class DiskApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
 
+   static final String DISKS_RESOURCE_URL = MYPROJECT_BASE_URL + "/disks";
+
    public void testGetDiskResponseIs2xx() throws Exception {
       HttpRequest get = HttpRequest
               .builder()
               .method("GET")
-              .endpoint("https://www.googleapis.com/compute/v1beta13/projects/myproject/disks/testimage1")
+              .endpoint(DISKS_RESOURCE_URL + "/testimage1")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -64,7 +66,7 @@ public class DiskApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
       HttpRequest get = HttpRequest
               .builder()
               .method("GET")
-              .endpoint("https://www.googleapis.com/compute/v1beta13/projects/myproject/disks/testimage1")
+              .endpoint(DISKS_RESOURCE_URL + "/testimage1")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -80,7 +82,7 @@ public class DiskApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
       HttpRequest insert = HttpRequest
               .builder()
               .method("POST")
-              .endpoint("https://www.googleapis.com/compute/v1beta13/projects/myproject/disks")
+              .endpoint(DISKS_RESOURCE_URL)
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN)
               .payload(payloadFromResourceWithContentType("/disk_insert.json", MediaType.APPLICATION_JSON))
@@ -93,8 +95,7 @@ public class DiskApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
               TOKEN_RESPONSE, insert,
               insertDiskResponse).getDiskApiForProject("myproject");
 
-      assertEquals(api.createInZone("testimage1", 1, URI.create("https://www.googleapis" +
-              ".com/compute/v1beta13/projects/myproject/zones/us-central1-a"))
+      assertEquals(api.createInZone("testimage1", 1, URI.create(ZoneApiExpectTest.ZONES_RESOURCE_URL + "/us-central1-a"))
               , new ParseOperationTest().expected());
    }
 
@@ -102,8 +103,7 @@ public class DiskApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
       HttpRequest delete = HttpRequest
               .builder()
               .method("DELETE")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/disks/testimage1")
+              .endpoint(DISKS_RESOURCE_URL + "/testimage1")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -121,8 +121,7 @@ public class DiskApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
       HttpRequest delete = HttpRequest
               .builder()
               .method("DELETE")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/disks/testimage1")
+              .endpoint(DISKS_RESOURCE_URL + "/testimage1")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -138,8 +137,7 @@ public class DiskApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
       HttpRequest list = HttpRequest
               .builder()
               .method("GET")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/disks")
+              .endpoint(DISKS_RESOURCE_URL)
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -157,8 +155,7 @@ public class DiskApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
       HttpRequest list = HttpRequest
               .builder()
               .method("GET")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/disks")
+              .endpoint(DISKS_RESOURCE_URL)
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 

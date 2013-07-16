@@ -40,13 +40,13 @@ import static org.testng.Assert.assertNull;
 @Test(groups = "unit")
 public class ProjectApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
 
-   public static final String PROJECTS_URL_PREFIX = "https://www.googleapis.com/compute/v1beta13/projects";
+   static final String PROJECTS_RESOURCE_URL = GOOGLE_COMPUTE_BASE_URL + "/projects";
 
    public void testGetProjectResponseIs2xx() throws Exception {
       HttpRequest getProjectRequest = HttpRequest
               .builder()
               .method("GET")
-              .endpoint(PROJECTS_URL_PREFIX + "/myproject")
+              .endpoint(PROJECTS_RESOURCE_URL + "/myproject")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -64,7 +64,7 @@ public class ProjectApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
       HttpRequest getProjectRequest = HttpRequest
               .builder()
               .method("GET")
-              .endpoint(PROJECTS_URL_PREFIX + "/myproject")
+              .endpoint(PROJECTS_RESOURCE_URL + "/myproject")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -81,7 +81,7 @@ public class ProjectApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
       HttpRequest setMetadata = HttpRequest
               .builder()
               .method("POST")
-              .endpoint(PROJECTS_URL_PREFIX + "/myproject/setCommonInstanceMetadata")
+              .endpoint(PROJECTS_RESOURCE_URL + "/myproject/setCommonInstanceMetadata")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN)
               .payload(payloadFromResourceWithContentType("/metadata.json", MediaType.APPLICATION_JSON))

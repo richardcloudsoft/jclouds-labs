@@ -27,6 +27,10 @@ import java.util.Properties;
  */
 public class BaseGoogleComputeEngineApiExpectTest extends BaseGoogleComputeEngineExpectTest<GoogleComputeEngineApi> {
 
+   public static final String GOOGLE_COMPUTE_BASE_URL = "https://www.googleapis.com/compute/v1beta13";
+   public static final String MYPROJECT_BASE_URL = GOOGLE_COMPUTE_BASE_URL + "/projects/myproject";
+   public static final String GOOGLE_PROJECT_BASE_URL = GOOGLE_COMPUTE_BASE_URL + "/projects/google";
+
    @Override
    protected Properties setupProperties() {
       Properties properties = super.setupProperties();

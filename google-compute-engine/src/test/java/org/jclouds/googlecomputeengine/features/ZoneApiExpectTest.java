@@ -37,19 +37,19 @@ import static org.testng.Assert.assertTrue;
 @Test(groups = "unit")
 public class ZoneApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
 
-   public static final String ZONES_URL_PREFIX = "https://www.googleapis.com/compute/v1beta13/projects/myproject/zones";
+   static final String ZONES_RESOURCE_URL = MYPROJECT_BASE_URL + "/zones";
 
    public static final HttpRequest GET_ZONE_REQ = HttpRequest
            .builder()
            .method("GET")
-           .endpoint(ZONES_URL_PREFIX + "/us-central1-a")
+           .endpoint(ZONES_RESOURCE_URL + "/us-central1-a")
            .addHeader("Accept", "application/json")
            .addHeader("Authorization", "Bearer " + TOKEN).build();
 
    public static final HttpRequest LIST_ZONES_REQ = HttpRequest
            .builder()
            .method("GET")
-           .endpoint(ZONES_URL_PREFIX)
+           .endpoint(ZONES_RESOURCE_URL)
            .addHeader("Accept", "application/json")
            .addHeader("Authorization", "Bearer " + TOKEN).build();
 

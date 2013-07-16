@@ -37,10 +37,12 @@ import static org.testng.Assert.assertTrue;
 @Test(groups = "unit")
 public class MachineTypeApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
 
+   static final String MACHINETYPES_RESOURCE_URL = MYPROJECT_BASE_URL + "/machineTypes";
+
    public static final HttpRequest LIST_MACHINE_TYPES_REQUEST = HttpRequest
            .builder()
            .method("GET")
-           .endpoint("https://www.googleapis.com/compute/v1beta13/projects/myproject/machineTypes")
+           .endpoint(MACHINETYPES_RESOURCE_URL)
            .addHeader("Accept", "application/json")
            .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -53,8 +55,7 @@ public class MachineTypeApiExpectTest extends BaseGoogleComputeEngineApiExpectTe
       HttpRequest get = HttpRequest
               .builder()
               .method("GET")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/machineTypes/n1-standard-1")
+              .endpoint(MACHINETYPES_RESOURCE_URL + "/n1-standard-1")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -72,8 +73,7 @@ public class MachineTypeApiExpectTest extends BaseGoogleComputeEngineApiExpectTe
       HttpRequest get = HttpRequest
               .builder()
               .method("GET")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/machineTypes/n1-standard-1")
+              .endpoint(MACHINETYPES_RESOURCE_URL + "/n1-standard-1")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
