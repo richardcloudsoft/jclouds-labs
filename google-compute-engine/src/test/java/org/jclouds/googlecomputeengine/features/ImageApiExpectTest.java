@@ -39,11 +39,13 @@ import static org.testng.AssertJUnit.assertNull;
 @Test(groups = "unit")
 public class ImageApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
 
+   public static final String MYPROJECT_IMAGES_RESOURCE_URL = MYPROJECT_BASE_URL + "/images";
+   public static final String GOOGLE_IMAGES_RESOURCE_URL = GOOGLE_PROJECT_BASE_URL + "/images";
+
    public static final HttpRequest LIST_PROJECT_IMAGES_REQUEST = HttpRequest
            .builder()
            .method("GET")
-           .endpoint("https://www.googleapis" +
-                   ".com/compute/v1beta13/projects/myproject/images")
+           .endpoint(MYPROJECT_IMAGES_RESOURCE_URL)
            .addHeader("Accept", "application/json")
            .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -54,8 +56,7 @@ public class ImageApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
       HttpRequest get = HttpRequest
               .builder()
               .method("GET")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/google/images/centos-6-2-v20120326")
+              .endpoint(GOOGLE_IMAGES_RESOURCE_URL + "/centos-6-2-v20120326")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -73,8 +74,7 @@ public class ImageApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
       HttpRequest get = HttpRequest
               .builder()
               .method("GET")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/google/images/centos-6-2-v20120326")
+              .endpoint(GOOGLE_IMAGES_RESOURCE_URL + "/centos-6-2-v20120326")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -90,8 +90,7 @@ public class ImageApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
       HttpRequest delete = HttpRequest
               .builder()
               .method("DELETE")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/images/centos-6-2-v20120326")
+              .endpoint(MYPROJECT_IMAGES_RESOURCE_URL + "/centos-6-2-v20120326")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -109,8 +108,7 @@ public class ImageApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
       HttpRequest delete = HttpRequest
               .builder()
               .method("DELETE")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/images/centos-6-2-v20120326")
+              .endpoint(MYPROJECT_IMAGES_RESOURCE_URL + "/centos-6-2-v20120326")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 

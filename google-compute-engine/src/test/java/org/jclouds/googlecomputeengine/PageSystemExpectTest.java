@@ -23,6 +23,7 @@ import org.jclouds.collect.IterableWithMarker;
 import org.jclouds.collect.PagedIterable;
 import org.jclouds.googlecomputeengine.domain.Image;
 import org.jclouds.googlecomputeengine.features.ImageApi;
+import org.jclouds.googlecomputeengine.features.ImageApiExpectTest;
 import org.jclouds.googlecomputeengine.internal.BaseGoogleComputeEngineApiExpectTest;
 import org.jclouds.googlecomputeengine.options.ListOptions;
 import org.jclouds.http.HttpRequest;
@@ -45,8 +46,7 @@ public class PageSystemExpectTest extends BaseGoogleComputeEngineApiExpectTest {
       HttpRequest list = HttpRequest
               .builder()
               .method("GET")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/images")
+              .endpoint(ImageApiExpectTest.MYPROJECT_IMAGES_RESOURCE_URL)
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -68,26 +68,21 @@ public class PageSystemExpectTest extends BaseGoogleComputeEngineApiExpectTest {
       HttpRequest list1 = HttpRequest
               .builder()
               .method("GET")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/images?maxResults=3")
+              .endpoint(ImageApiExpectTest.MYPROJECT_IMAGES_RESOURCE_URL + "?maxResults=3")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
       HttpRequest list2 = HttpRequest
               .builder()
               .method("GET")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/images?pageToken" +
-                      "=CgVJTUFHRRIbZ29vZ2xlLmNlbnRvcy02LTItdjIwMTIwNjIx&maxResults=3")
+              .endpoint(ImageApiExpectTest.MYPROJECT_IMAGES_RESOURCE_URL + "?pageToken=CgVJTUFHRRIbZ29vZ2xlLmNlbnRvcy02LTItdjIwMTIwNjIx&maxResults=3")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
       HttpRequest list3 = HttpRequest
               .builder()
               .method("GET")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/images?pageToken" +
-                      "=CgVJTUFHRRIbZ29vZ2xlLmdjZWwtMTAtMDQtdjIwMTIxMTA2&maxResults=3")
+              .endpoint(ImageApiExpectTest.MYPROJECT_IMAGES_RESOURCE_URL + "?pageToken=CgVJTUFHRRIbZ29vZ2xlLmdjZWwtMTAtMDQtdjIwMTIxMTA2&maxResults=3")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 

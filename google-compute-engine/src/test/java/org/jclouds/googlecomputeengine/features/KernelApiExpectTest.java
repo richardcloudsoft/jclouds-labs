@@ -37,12 +37,13 @@ import static org.testng.Assert.assertTrue;
 @Test(groups = "unit")
 public class KernelApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
 
+   static final String KERNELS_RESOURCE_URL = MYPROJECT_BASE_URL + "/kernels";
+
    public void testGetKernelResponseIs2xx() throws Exception {
       HttpRequest get = HttpRequest
               .builder()
               .method("GET")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/kernels/12941177846308850718")
+              .endpoint(KERNELS_RESOURCE_URL + "/12941177846308850718")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -60,8 +61,7 @@ public class KernelApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
       HttpRequest get = HttpRequest
               .builder()
               .method("GET")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/kernels/12941177846308850718")
+              .endpoint(KERNELS_RESOURCE_URL + "/12941177846308850718")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -77,8 +77,7 @@ public class KernelApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
       HttpRequest list = HttpRequest
               .builder()
               .method("GET")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/kernels")
+              .endpoint(KERNELS_RESOURCE_URL)
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -96,8 +95,7 @@ public class KernelApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
       HttpRequest list = HttpRequest
               .builder()
               .method("GET")
-              .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/kernels")
+              .endpoint(KERNELS_RESOURCE_URL)
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
