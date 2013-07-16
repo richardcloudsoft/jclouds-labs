@@ -39,7 +39,7 @@ import static org.testng.AssertJUnit.assertNull;
 @Test(groups = "unit")
 public class ImageApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
 
-   static final String MYPROJECT_IMAGES_RESOURCE_URL = MYPROJECT_BASE_URL + "/images";
+   public static final String MYPROJECT_IMAGES_RESOURCE_URL = MYPROJECT_BASE_URL + "/images";
    static final String GOOGLE_IMAGES_RESOURCE_URL = GOOGLE_PROJECT_BASE_URL + "/images";
 
    public static final HttpRequest LIST_PROJECT_IMAGES_REQUEST = HttpRequest
