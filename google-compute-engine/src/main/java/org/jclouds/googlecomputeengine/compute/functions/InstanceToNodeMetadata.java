@@ -30,6 +30,7 @@ import org.jclouds.compute.domain.NodeMetadataBuilder;
 import org.jclouds.compute.functions.GroupNamingConvention;
 import org.jclouds.domain.Location;
 import org.jclouds.googlecomputeengine.domain.Instance;
+import org.jclouds.googlecomputeengine.domain.ZoneAndId;
 
 import javax.inject.Inject;
 import java.net.URI;
@@ -70,13 +71,15 @@ public class InstanceToNodeMetadata implements Function<Instance, NodeMetadata> 
       Image image = checkNotNull(imagesMap.get(checkNotNull(input.getImage(), "image")),
               "no image for %s. images: %s", input.getImage(), imagesMap.values());
 
+      Map<URI, ? extends Location> uriMap = locations.get();
+      Location location = checkNotNull(uriMap.get(input.getZone()), "location for %s - known locations are %s", input.getZone(), uriMap.keySet());
       return new NodeMetadataBuilder()
-              .id(input.getName())
+              .id(ZoneAndId.fromZoneAndId(location.getId(), input.getName()).slashEncode())
               .name(input.getName())
               .providerId(input.getId())
               .hostname(input.getName())
               .imageId(image.getId())
-              .location(checkNotNull(locations.get().get(input.getZone()), "location for %s", input.getZone()))
+              .location(location)
               .hardware(checkNotNull(hardwares.get().get(input.getMachineType()), "hardware type for %s",
                       input.getMachineType().toString()))
               .operatingSystem(image.getOperatingSystem())

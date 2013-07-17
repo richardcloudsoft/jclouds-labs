@@ -32,7 +32,7 @@ import com.google.inject.Module;
 /**
  * @author David Alves
  */
-@Test(groups = "live", singleThreaded = true)
+@Test(groups = "qlive", singleThreaded = true)
 public class GoogleComputeEngineServiceLiveTest extends BaseComputeServiceLiveTest {
 
    public GoogleComputeEngineServiceLiveTest() {

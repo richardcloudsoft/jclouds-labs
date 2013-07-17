@@ -21,6 +21,7 @@ package org.jclouds.googlecomputeengine.config;
 
 import com.google.common.collect.ForwardingMap;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Range;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
@@ -108,16 +109,16 @@ public class GoogleComputeEngineParserModule extends AbstractModule {
 
       private static class OperationInternal extends Operation {
          @ConstructorProperties({
-                 "id", "creationTimestamp", "selfLink", "name", "description", "targetLink", "targetId",
+                 "id", "creationTimestamp", "selfLink", "name", "description", "targetLink", "targetId", "zone",
                  "clientOperationId", "status", "statusMessage", "user", "progress", "insertTime", "startTime",
                  "endTime", "httpErrorStatusCode", "httpErrorMessage", "operationType"
          })
          private OperationInternal(String id, Date creationTimestamp, URI selfLink, String name,
-                                   String description, URI targetLink, String targetId, String clientOperationId,
+                                   String description, URI targetLink, String targetId, URI zoneLink, String clientOperationId,
                                    Status status, String statusMessage, String user, int progress, Date insertTime,
                                    Date startTime, Date endTime, int httpErrorStatusCode, String httpErrorMessage,
                                    String operationType) {
-            super(id, creationTimestamp, selfLink, name, description, targetLink, targetId, clientOperationId,
+            super(id, creationTimestamp, selfLink, name, description, targetLink, targetId, zoneLink, clientOperationId,
                     status, statusMessage, user, progress, insertTime, startTime, endTime, httpErrorStatusCode,
                     httpErrorMessage, operationType, null);
          }
@@ -204,14 +205,14 @@ public class GoogleComputeEngineParserModule extends AbstractModule {
 
       private static class InstanceInternal extends Instance {
          @ConstructorProperties({
-                 "id", "creationTimestamp", "selfLink", "name", "description", "tags", "image", "machineType",
+                 "id", "creationTimestamp", "selfLink", "name", "description", "image", "machineType",
                  "status", "statusMessage", "zone", "networkInterfaces", "metadata", "serviceAccounts"
          })
          private InstanceInternal(String id, Date creationTimestamp, URI selfLink, String name, String description,
-                                  Set<String> tags, URI image, URI machineType, Status status, String statusMessage,
+                                  URI image, URI machineType, Status status, String statusMessage,
                                   URI zone, Set<NetworkInterface> networkInterfaces, Metadata metadata,
                                   Set<ServiceAccount> serviceAccounts) {
-            super(id, creationTimestamp, selfLink, name, description, tags, image, machineType,
+            super(id, creationTimestamp, selfLink, name, description, ImmutableSet.<String>of(), image, machineType,
                     status, statusMessage, zone, networkInterfaces, null, metadata, serviceAccounts);
          }
       }

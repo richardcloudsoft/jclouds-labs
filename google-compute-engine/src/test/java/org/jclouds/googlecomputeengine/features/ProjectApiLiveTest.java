@@ -42,6 +42,7 @@ import static org.testng.Assert.assertTrue;
 /**
  * @author David Alves
  */
+@Test(groups = "live", singleThreaded = true)
 public class ProjectApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
 
    private static final String METADATA_ITEM_KEY = "projectLiveTestTestProp";

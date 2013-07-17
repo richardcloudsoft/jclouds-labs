@@ -38,6 +38,7 @@ import static org.testng.Assert.assertNotNull;
 /**
  * @author David Alves
  */
+@Test(groups = "live", singleThreaded = true)
 public class FirewallApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
 
    private static final String FIREWALL_NAME = "firewall-api-live-test-firewall";

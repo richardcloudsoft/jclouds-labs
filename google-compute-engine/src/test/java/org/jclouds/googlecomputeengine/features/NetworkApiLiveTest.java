@@ -36,6 +36,7 @@ import com.google.common.collect.Lists;
 /**
  * @author David Alves
  */
+@Test(groups = "live", singleThreaded = true)
 public class NetworkApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
 
    private static final String NETWORK_NAME = "network-api-live-test-network";

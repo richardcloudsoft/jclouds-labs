@@ -37,7 +37,7 @@ import static org.testng.Assert.assertTrue;
 @Test(groups = "unit")
 public class KernelApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
 
-   static final String KERNELS_RESOURCE_URL = MYPROJECT_BASE_URL + "/kernels";
+   static final String KERNELS_RESOURCE_URL = MYPROJECT_BASE_URL + "/global/kernels";
 
    public void testGetKernelResponseIs2xx() throws Exception {
       HttpRequest get = HttpRequest

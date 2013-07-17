@@ -71,7 +71,6 @@ public class ParseInstanceTest extends BaseGoogleComputeEngineParseTest<Instance
                                       ".com/compute/v1beta13/projects/myproject/disks/test"))
                               .build()
               )
-              .addTag("aTag")
               .metadata(ImmutableMap.of("aKey", "aValue"))
               .addServiceAccount(Instance.ServiceAccount.builder().email("default").addScopes("myscope").build())
               .build();

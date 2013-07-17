@@ -38,6 +38,7 @@ import static org.testng.Assert.assertNotNull;
 /**
  * @author David Alves
  */
+@Test(groups = "live", singleThreaded = true)
 public class OperationApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
 
    private static final String METADATA_ITEM_KEY = "operationLiveTestTestProp";
@@ -46,7 +47,7 @@ public class OperationApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
    private Operation deleteOperation;
 
    private OperationApi api() {
-      return api.getOperationApiForProject(userProject.get());
+      return api.getGlobalOperationApiForProject(userProject.get());
    }
 
 

@@ -52,10 +52,11 @@ public interface GoogleComputeEngineApi extends Closeable {
     * Provides access to Disk features
     *
     * @param projectName the name of the project
+    * @param zoneName the name of the zone
     */
    @Delegate
-   @Path("/projects/{project}")
-   DiskApi getDiskApiForProject(@PathParam("project") String projectName);
+   @Path("/projects/{project}/zones/{zone}")
+   DiskApi getDiskApiForProjectAndZone(@PathParam("project") String projectName, @PathParam("zone") String zoneName);
 
    /**
     * Provides access to Firewall features
@@ -63,7 +64,7 @@ public interface GoogleComputeEngineApi extends Closeable {
     * @param projectName the name of the project
     */
    @Delegate
-   @Path("/projects/{project}")
+   @Path("/projects/{project}/global")
    FirewallApi getFirewallApiForProject(@PathParam("project") String projectName);
 
    /**
@@ -72,17 +73,18 @@ public interface GoogleComputeEngineApi extends Closeable {
     * @param projectName the name of the project
     */
    @Delegate
-   @Path("/projects/{project}")
+   @Path("/projects/{project}/global")
    ImageApi getImageApiForProject(@PathParam("project") String projectName);
 
    /**
     * Provides access to Instance features
     *
     * @param projectName the name of the project
+    * @param zoneName the name of the zone
     */
    @Delegate
-   @Path("/projects/{project}")
-   InstanceApi getInstanceApiForProject(@PathParam("project") String projectName);
+   @Path("/projects/{project}/zones/{zone}")
+   InstanceApi getInstanceApiForProjectAndZone(@PathParam("project") String projectName, @PathParam("zone") String zoneName);
 
    /**
     * Provides access to Kernel features
@@ -90,7 +92,7 @@ public interface GoogleComputeEngineApi extends Closeable {
     * @param projectName the name of the project
     */
    @Delegate
-   @Path("/projects/{project}")
+   @Path("/projects/{project}/global")
    KernelApi getKernelApiForProject(@PathParam("project") String projectName);
 
    /**
@@ -99,7 +101,7 @@ public interface GoogleComputeEngineApi extends Closeable {
     * @param projectName the name of the project
     */
    @Delegate
-   @Path("/projects/{project}")
+   @Path("/projects/{project}/global")
    MachineTypeApi getMachineTypeApiForProject(@PathParam("project") String projectName);
 
    /**
@@ -108,17 +110,27 @@ public interface GoogleComputeEngineApi extends Closeable {
     * @param projectName the name of the project
     */
    @Delegate
-   @Path("/projects/{project}")
+   @Path("/projects/{project}/global")
    NetworkApi getNetworkApiForProject(@PathParam("project") String projectName);
 
    /**
-    * Provides access to Operation features
+    * Provides access to Operation features on global resources
     *
     * @param projectName the name of the project
     */
    @Delegate
-   @Path("/projects/{project}")
-   OperationApi getOperationApiForProject(@PathParam("project") String projectName);
+   @Path("/projects/{project}/global")
+   OperationApi getGlobalOperationApiForProject(@PathParam("project") String projectName);
+
+   /**
+    * Provides access to Operation features in a specific zone
+    *
+    * @param projectName the name of the project
+    * @param zoneName the name of the zone
+    */
+   @Delegate
+   @Path("/projects/{project}/zones/{zone}")
+   OperationApi getOperationApiForProjectAndZone(@PathParam("project") String projectName, @PathParam("zone") String zoneName);
 
    /**
     * Provides access to Project features

@@ -40,6 +40,7 @@ import com.google.inject.Module;
 /**
  * @author David Alves
  */
+@Test(groups = "live", singleThreaded = true)
 public class InstanceApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
 
    private static final String INSTANCE_NETWORK_NAME = "instance-api-live-test-network";
@@ -55,10 +56,10 @@ public class InstanceApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
       GoogleComputeEngineApi api = super.create(props, modules);
       instance = InstanceTemplate.builder()
             .forMachineType(getDefaultMachineTypekUrl(userProject.get()))
+            .image(getImageUrl("google", "gcel-12-04-v20130325"))
             .addNetworkInterface(getNetworkUrl(userProject.get(), INSTANCE_NETWORK_NAME),
                     Instance.NetworkInterface.AccessConfig.Type.ONE_TO_ONE_NAT)
             .addMetadata("mykey", "myvalue")
-            .addTag("atag")
             .description("a description")
             .addDisk(InstanceTemplate.PersistentDisk.Mode.READ_WRITE, getDiskUrl(userProject.get(), DISK_NAME))
             .zone(getDefaultZoneUrl(userProject.get()));
@@ -66,7 +67,7 @@ public class InstanceApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
    }
 
    private InstanceApi api() {
-      return api.getInstanceApiForProject(userProject.get());
+      return api.getInstanceApiForProjectAndZone(userProject.get(), DEFAULT_ZONE_NAME);
    }
 
    @Test(groups = "live")
@@ -76,7 +77,7 @@ public class InstanceApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
       assertOperationDoneSucessfully(api.getNetworkApiForProject(userProject.get()).createInIPv4Range
               (INSTANCE_NETWORK_NAME, IPV4_RANGE), TIME_WAIT);
 
-      assertOperationDoneSucessfully(api.getDiskApiForProject(userProject.get()).createInZone
+      assertOperationDoneSucessfully(api.getDiskApiForProjectAndZone(userProject.get(), DEFAULT_ZONE_NAME).createInZone
               ("instance-live-test-disk", 1, getDefaultZoneUrl(userProject.get())), TIME_WAIT);
 
       assertOperationDoneSucessfully(api().createInZone(INSTANCE_NAME, instance, DEFAULT_ZONE_NAME), TIME_WAIT);
@@ -109,7 +110,7 @@ public class InstanceApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
    public void testDeleteInstance() {
 
       assertOperationDoneSucessfully(api().delete(INSTANCE_NAME), TIME_WAIT);
-      assertOperationDoneSucessfully(api.getDiskApiForProject(userProject.get()).delete(DISK_NAME),
+      assertOperationDoneSucessfully(api.getDiskApiForProjectAndZone(userProject.get(), DEFAULT_ZONE_NAME).delete(DISK_NAME),
               TIME_WAIT);
       assertOperationDoneSucessfully(api.getNetworkApiForProject(userProject.get()).delete
               (INSTANCE_NETWORK_NAME), TIME_WAIT);

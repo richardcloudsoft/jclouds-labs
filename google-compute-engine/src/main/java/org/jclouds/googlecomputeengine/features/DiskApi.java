@@ -100,7 +100,7 @@ public interface DiskApi {
    @MapBinder(BindToJsonPayload.class)
    Operation createInZone(@PayloadParam("name") String diskName,
                                             @PayloadParam("sizeGb") int sizeGb,
-                                            @PayloadParam("zone") URI zone);
+                                            @PayloadParam("zone") @Nullable URI zone);
 
    /**
     * Deletes the specified persistent disk resource.

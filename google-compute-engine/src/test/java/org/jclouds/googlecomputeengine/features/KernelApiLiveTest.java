@@ -39,6 +39,7 @@ import static org.testng.Assert.assertTrue;
 /**
  * @author David Alves
  */
+@Test(groups = "live", singleThreaded = true)
 public class KernelApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
 
    private Kernel kernel;

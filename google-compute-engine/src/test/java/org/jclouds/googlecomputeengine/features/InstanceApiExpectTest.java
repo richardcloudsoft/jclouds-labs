@@ -46,7 +46,8 @@ import static org.testng.AssertJUnit.assertNull;
 @Test(groups = "unit")
 public class InstanceApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
 
-   public static final String INSTANCE_RESOURCE_URL = MYPROJECT_BASE_URL + "/instances";
+   public static final String INSTANCE_RESOURCE_URL = MYPROJECT_BASE_URL + "/zones/" + ZONE_US_CENTRAL1_A + "/instances";
+   public static final String INSTANCE_RESOURCE_URL_EAST = MYPROJECT_BASE_URL + "/zones/" + ZONE_US_EAST1_A + "/instances";
 
    public static final HttpRequest GET_INSTANCE_REQUEST = HttpRequest
            .builder()
@@ -66,8 +67,18 @@ public class InstanceApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
            .addHeader("Accept", "application/json")
            .addHeader("Authorization", "Bearer " + TOKEN).build();
 
+   public static final HttpRequest LIST_INSTANCES_EAST_REQUEST = HttpRequest
+           .builder()
+           .method("GET")
+           .endpoint(INSTANCE_RESOURCE_URL_EAST)
+           .addHeader("Accept", "application/json")
+           .addHeader("Authorization", "Bearer " + TOKEN).build();
+
    public static final HttpResponse LIST_INSTANCES_RESPONSE = HttpResponse.builder().statusCode(200)
            .payload(staticPayloadFromResource("/instance_list.json")).build();
+
+   public static final HttpResponse LIST_INSTANCES_EAST_RESPONSE = HttpResponse.builder().statusCode(200)
+           .payload(staticPayloadFromResource("/instance_list_empty.json")).build();
 
    public static final HttpResponse CREATE_INSTANCE_RESPONSE = HttpResponse.builder().statusCode(200)
            .payload(staticPayloadFromResource("/operation.json")).build();
@@ -77,7 +88,7 @@ public class InstanceApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
 
       InstanceApi api = requestsSendResponses(
               requestForScopes(COMPUTE_READONLY_SCOPE), TOKEN_RESPONSE,
-              GET_INSTANCE_REQUEST, GET_INSTANCE_RESPONSE).getInstanceApiForProject("myproject");
+              GET_INSTANCE_REQUEST, GET_INSTANCE_RESPONSE).getInstanceApiForProjectAndZone("myproject", ZONE_US_CENTRAL1_A);
 
       assertEquals(api.get("test-1"), new ParseInstanceTest().expected());
    }
@@ -87,7 +98,7 @@ public class InstanceApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
       HttpResponse operationResponse = HttpResponse.builder().statusCode(404).build();
 
       InstanceApi api = requestsSendResponses(requestForScopes(COMPUTE_READONLY_SCOPE),
-              TOKEN_RESPONSE, GET_INSTANCE_REQUEST, operationResponse).getInstanceApiForProject("myproject");
+              TOKEN_RESPONSE, GET_INSTANCE_REQUEST, operationResponse).getInstanceApiForProjectAndZone("myproject", ZONE_US_CENTRAL1_A);
 
       assertNull(api.get("test-1"));
    }
@@ -105,7 +116,7 @@ public class InstanceApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
 
 
       InstanceApi api = requestsSendResponses(requestForScopes(COMPUTE_READONLY_SCOPE),
-              TOKEN_RESPONSE, get, operationResponse).getInstanceApiForProject("myproject");
+              TOKEN_RESPONSE, get, operationResponse).getInstanceApiForProjectAndZone("myproject", ZONE_US_CENTRAL1_A);
 
       assertEquals(api.getSerialPortOutput("test-1"), new ParseInstanceSerialOutputTest().expected());
    }
@@ -122,7 +133,7 @@ public class InstanceApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
 
       InstanceApi api = requestsSendResponses(requestForScopes(COMPUTE_SCOPE),
               TOKEN_RESPONSE, insert,
-              CREATE_INSTANCE_RESPONSE).getInstanceApiForProject("myproject");
+              CREATE_INSTANCE_RESPONSE).getInstanceApiForProjectAndZone("myproject", ZONE_US_CENTRAL1_A);
 
       InstanceTemplate options = InstanceTemplate.builder().forMachineType("n1-standard-1")
               .addNetworkInterface(URI.create(NetworkApiExpectTest.NETWORKS_RESOURCE_URL + "/default"));
@@ -144,7 +155,7 @@ public class InstanceApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
               .payload(payloadFromResource("/operation.json")).build();
 
       InstanceApi api = requestsSendResponses(requestForScopes(COMPUTE_SCOPE),
-              TOKEN_RESPONSE, insert, insertInstanceResponse).getInstanceApiForProject("myproject");
+              TOKEN_RESPONSE, insert, insertInstanceResponse).getInstanceApiForProjectAndZone("myproject", ZONE_US_CENTRAL1_A);
 
       InstanceTemplate options = InstanceTemplate.builder().forMachineType("n1-standard-1")
               .addNetworkInterface(URI.create(NetworkApiExpectTest.NETWORKS_RESOURCE_URL + "/default"), Instance.NetworkInterface.AccessConfig.Type.ONE_TO_ONE_NAT)
@@ -172,7 +183,7 @@ public class InstanceApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
               .payload(payloadFromResource("/operation.json")).build();
 
       InstanceApi api = requestsSendResponses(requestForScopes(COMPUTE_SCOPE),
-              TOKEN_RESPONSE, delete, deleteResponse).getInstanceApiForProject("myproject");
+              TOKEN_RESPONSE, delete, deleteResponse).getInstanceApiForProjectAndZone("myproject", ZONE_US_CENTRAL1_A);
 
       assertEquals(api.delete("test-1"),
               new ParseOperationTest().expected());
@@ -189,7 +200,7 @@ public class InstanceApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
       HttpResponse deleteResponse = HttpResponse.builder().statusCode(404).build();
 
       InstanceApi api = requestsSendResponses(requestForScopes(COMPUTE_SCOPE),
-              TOKEN_RESPONSE, delete, deleteResponse).getInstanceApiForProject("myproject");
+              TOKEN_RESPONSE, delete, deleteResponse).getInstanceApiForProjectAndZone("myproject", ZONE_US_CENTRAL1_A);
 
       assertNull(api.delete("test-1"));
    }
@@ -198,7 +209,7 @@ public class InstanceApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
 
       InstanceApi api = requestsSendResponses(
               requestForScopes(COMPUTE_READONLY_SCOPE), TOKEN_RESPONSE,
-              LIST_INSTANCES_REQUEST, LIST_INSTANCES_RESPONSE).getInstanceApiForProject("myproject");
+              LIST_INSTANCES_REQUEST, LIST_INSTANCES_RESPONSE).getInstanceApiForProjectAndZone("myproject", ZONE_US_CENTRAL1_A);
 
       assertEquals(api.listFirstPage().toString(),
               new ParseInstanceListTest().expected().toString());
@@ -215,7 +226,7 @@ public class InstanceApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
       HttpResponse operationResponse = HttpResponse.builder().statusCode(404).build();
 
       InstanceApi api = requestsSendResponses(requestForScopes(COMPUTE_READONLY_SCOPE),
-              TOKEN_RESPONSE, list, operationResponse).getInstanceApiForProject("myproject");
+              TOKEN_RESPONSE, list, operationResponse).getInstanceApiForProjectAndZone("myproject", ZONE_US_CENTRAL1_A);
 
       assertTrue(api.list().concat().isEmpty());
    }

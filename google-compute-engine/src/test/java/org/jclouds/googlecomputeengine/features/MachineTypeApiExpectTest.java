@@ -37,7 +37,7 @@ import static org.testng.Assert.assertTrue;
 @Test(groups = "unit")
 public class MachineTypeApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
 
-   static final String MACHINETYPES_RESOURCE_URL = MYPROJECT_BASE_URL + "/machineTypes";
+   public static final String MACHINETYPES_RESOURCE_URL = MYPROJECT_BASE_URL + "/global/machineTypes";
 
    public static final HttpRequest LIST_MACHINE_TYPES_REQUEST = HttpRequest
            .builder()

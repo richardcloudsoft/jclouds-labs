@@ -38,6 +38,7 @@ import com.google.common.collect.Lists;
 /**
  * @author David Alves
  */
+@Test(groups = "live", singleThreaded = true)
 public class DiskApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
 
    private static final String DISK_NAME = "disk-api-live-test-disk";
@@ -47,7 +48,7 @@ public class DiskApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
    private int sizeGb = 1;
 
    private DiskApi api() {
-      return api.getDiskApiForProject(userProject.get());
+      return api.getDiskApiForProjectAndZone(userProject.get(), DEFAULT_ZONE_NAME);
    }
 
    @Test(groups = "live")

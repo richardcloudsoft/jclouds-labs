@@ -43,7 +43,7 @@ public class ParseInstances extends ParseJson<ListPage<Instance>> {
       super(json, new TypeLiteral<ListPage<Instance>>() {});
    }
 
-   public static class ToPagedIterable extends BaseToPagedIterable<Instance, ToPagedIterable> {
+   public static class ToPagedIterable extends BaseToPagedIterableWithZone<Instance, ToPagedIterable> {
 
       private final GoogleComputeEngineApi api;
 
@@ -54,12 +54,13 @@ public class ParseInstances extends ParseJson<ListPage<Instance>> {
 
       @Override
       protected Function<Object, IterableWithMarker<Instance>> fetchNextPage(final String projectName,
+                                                                             final String zoneName,
                                                                              final ListOptions options) {
          return new Function<Object, IterableWithMarker<Instance>>() {
 
             @Override
             public IterableWithMarker<Instance> apply(Object input) {
-               return api.getInstanceApiForProject(projectName).listAtMarker(input.toString(), options);
+               return api.getInstanceApiForProjectAndZone(projectName, zoneName).listAtMarker(input.toString(), options);
             }
          };
       }

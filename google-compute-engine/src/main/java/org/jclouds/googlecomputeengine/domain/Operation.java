@@ -52,6 +52,7 @@ public class Operation extends Resource {
 
    private final URI targetLink;
    private final Optional<String> targetId;
+   private final Optional<URI> zoneLink;
    private final Optional<String> clientOperationId;
    private final Status status;
    private final Optional<String> statusMessage;
@@ -65,13 +66,14 @@ public class Operation extends Resource {
    private final List<Error> errors;
 
    protected Operation(String id, Date creationTimestamp, URI selfLink, String name, String description,
-                       URI targetLink, String targetId, String clientOperationId, Status status,
+                       URI targetLink, String targetId, URI zoneLink, String clientOperationId, Status status,
                        String statusMessage, String user, Integer progress, Date insertTime, Date startTime,
                        Date endTime, Integer httpErrorStatusCode, String httpErrorMessage, String operationType,
                        List<Error> errors) {
       super(Kind.OPERATION, id, creationTimestamp, selfLink, name, description);
       this.targetLink = checkNotNull(targetLink, "targetLink of %s", name);
       this.targetId = fromNullable(targetId);
+      this.zoneLink = fromNullable(zoneLink);
       this.clientOperationId = fromNullable(clientOperationId);
       this.status = checkNotNull(status, "status of %s", name);
       this.statusMessage = fromNullable(statusMessage);
@@ -102,6 +104,13 @@ public class Operation extends Resource {
     */
    public Optional<String> getTargetId() {
       return targetId;
+   }
+
+   /**
+    * @return link to the zone where this operation is executing.
+    */
+   public Optional<URI> getZoneLink() {
+      return zoneLink;
    }
 
    /**
@@ -192,6 +201,7 @@ public class Operation extends Resource {
               .omitNullValues()
               .add("targetLink", targetLink)
               .add("targetId", targetId.orNull())
+              .add("zoneLink", zoneLink.orNull())
               .add("clientOperationId", clientOperationId.orNull())
               .add("status", status)
               .add("statusMessage", statusMessage.orNull())
@@ -225,6 +235,7 @@ public class Operation extends Resource {
 
       private URI targetLink;
       private String targetId;
+      private URI zoneLink;
       private String clientOperationId;
       private Status status;
       private String statusMessage;
@@ -251,6 +262,14 @@ public class Operation extends Resource {
        */
       public Builder targetId(String targetId) {
          this.targetId = targetId;
+         return self();
+      }
+
+      /**
+       * @see Operation#getZoneLink()
+       */
+      public Builder zoneLink(URI zoneLink) {
+         this.zoneLink = zoneLink;
          return self();
       }
 
@@ -366,7 +385,7 @@ public class Operation extends Resource {
 
       public Operation build() {
          return new Operation(super.id, super.creationTimestamp, super.selfLink, super.name,
-                 super.description, targetLink, targetId, clientOperationId, status, statusMessage, user, progress,
+                 super.description, targetLink, targetId, zoneLink, clientOperationId, status, statusMessage, user, progress,
                  insertTime, startTime, endTime, httpErrorStatusCode, httpErrorMessage, operationType,
                  errors.build());
       }
@@ -375,6 +394,7 @@ public class Operation extends Resource {
          return super.fromResource(in)
                  .targetLink(in.getTargetLink())
                  .targetId(in.getTargetId().orNull())
+                 .zoneLink(in.getZoneLink().orNull())
                  .clientOperationId(in.getClientOperationId().orNull())
                  .status(in.getStatus())
                  .statusMessage(in.getStatusMessage().orNull())
