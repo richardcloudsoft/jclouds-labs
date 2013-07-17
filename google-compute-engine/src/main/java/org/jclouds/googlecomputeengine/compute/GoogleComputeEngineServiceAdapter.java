@@ -42,6 +42,7 @@ import org.jclouds.googlecomputeengine.domain.InstanceTemplate;
 import org.jclouds.googlecomputeengine.domain.MachineType;
 import org.jclouds.googlecomputeengine.domain.Operation;
 import org.jclouds.googlecomputeengine.domain.Zone;
+import org.jclouds.googlecomputeengine.domain.ZoneAndId;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.logging.Logger;
 
@@ -126,8 +127,9 @@ public class GoogleComputeEngineServiceAdapter implements ComputeServiceAdapter<
       instanceTemplate.serviceAccounts(options.getServiceAccounts());
       instanceTemplate.image(checkNotNull(template.getImage().getUri(), "image URI is null"));
 
+      String zoneName = template.getLocation().getId();
       Operation operation = api.getInstanceApiForProject(userProject.get())
-              .createInZone(name, instanceTemplate, template.getLocation().getId());
+              .createInZone(name, instanceTemplate, zoneName);
 
       if (options.shouldBlockUntilRunning()) {
          waitOperationDone(operation);
@@ -144,7 +146,7 @@ public class GoogleComputeEngineServiceAdapter implements ComputeServiceAdapter<
          }
       }, operationCompleteCheckTimeout, operationCompleteCheckInterval, MILLISECONDS).apply(instance);
 
-      return new NodeAndInitialCredentials<Instance>(instance.get(), name, credentials);
+      return new NodeAndInitialCredentials<Instance>(instance.get(), ZoneAndId.fromZoneAndId(zoneName, name).slashEncode(), credentials);
    }
 
 
@@ -173,8 +175,9 @@ public class GoogleComputeEngineServiceAdapter implements ComputeServiceAdapter<
    }
 
    @Override
-   public Instance getNode(String name) {
-      return api.getInstanceApiForProject(userProject.get()).get(name);
+   public Instance getNode(String id) {
+      ZoneAndId zoneAndId = ZoneAndId.fromSlashEncoded(id);
+      return api.getInstanceApiForProject(userProject.get()).get(zoneAndId.getId());
    }
 
    @Override
@@ -194,8 +197,9 @@ public class GoogleComputeEngineServiceAdapter implements ComputeServiceAdapter<
    }
 
    @Override
-   public void destroyNode(final String name) {
-      waitOperationDone(api.getInstanceApiForProject(userProject.get()).delete(name));
+   public void destroyNode(final String id) {
+      ZoneAndId zoneAndId = ZoneAndId.fromSlashEncoded(id);
+      waitOperationDone(api.getInstanceApiForProject(userProject.get()).delete(zoneAndId.getId()));
    }
 
    @Override
