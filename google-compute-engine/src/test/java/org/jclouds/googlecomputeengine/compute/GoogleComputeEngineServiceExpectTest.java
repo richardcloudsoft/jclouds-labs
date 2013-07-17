@@ -307,7 +307,7 @@ public class GoogleComputeEngineServiceExpectTest extends BaseGoogleComputeEngin
               .build();
 
       ComputeService client = orderedRequestsSendResponses(orderedRequests, orderedResponses);
-      client.destroyNode("test-delete-networks");
+      client.destroyNode("us-central1-a/test-delete-networks");
 
    }
 
@@ -333,7 +333,7 @@ public class GoogleComputeEngineServiceExpectTest extends BaseGoogleComputeEngin
 
       assertNotNull(apiWhenServersExist.listNodes());
       assertEquals(apiWhenServersExist.listNodes().size(), 1);
-      assertEquals(apiWhenServersExist.listNodes().iterator().next().getId(), "test-0");
+      assertEquals(apiWhenServersExist.listNodes().iterator().next().getId(), "us-central1-a/test-0");
       assertEquals(apiWhenServersExist.listNodes().iterator().next().getName(), "test-0");
    }
 
