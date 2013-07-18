@@ -59,6 +59,8 @@ public class ParseMachineTypeListTest extends BaseGoogleComputeEngineParseTest<L
                       .guestCpus(1)
                       .memoryMb(3840)
                       .imageSpaceGb(10)
+                      .addEphemeralDisk(1770)
+                      .addEphemeralDisk(1770)
                       .maximumPersistentDisks(16)
                       .maximumPersistentDisksSizeGb(128)
                       .build())

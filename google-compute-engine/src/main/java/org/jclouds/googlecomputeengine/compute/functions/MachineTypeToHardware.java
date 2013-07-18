@@ -20,13 +20,17 @@
 package org.jclouds.googlecomputeengine.compute.functions;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableSet;
 import org.jclouds.compute.domain.Hardware;
 import org.jclouds.compute.domain.HardwareBuilder;
+import org.jclouds.compute.domain.Image;
 import org.jclouds.compute.domain.Processor;
 import org.jclouds.compute.domain.Volume;
 import org.jclouds.compute.domain.internal.VolumeImpl;
 import org.jclouds.googlecomputeengine.domain.MachineType;
+
+import java.util.Set;
 
 /**
  * Transforms a google compute domain specific machine type to a generic Hardware object.
@@ -37,6 +41,7 @@ public class MachineTypeToHardware implements Function<MachineType, Hardware> {
 
    @Override
    public Hardware apply(MachineType input) {
+      Set<Volume> volumes = collectVolumes(input);
       return new HardwareBuilder()
               .id(input.getName())
               .name(input.getName())
@@ -45,11 +50,12 @@ public class MachineTypeToHardware implements Function<MachineType, Hardware> {
               .providerId(input.getId())
               .ram(input.getMemoryMb())
               .uri(input.getSelfLink())
-              .volumes(collectVolumes(input))
+              .volumes(volumes)
+              .supportsImage(volumes.isEmpty() ? Predicates.<Image>alwaysFalse() : Predicates.<Image>alwaysTrue())
               .build();
    }
 
-   private Iterable<Volume> collectVolumes(MachineType input) {
+   private Set<Volume> collectVolumes(MachineType input) {
       ImmutableSet.Builder<Volume> volumes = ImmutableSet.builder();
       for (MachineType.EphemeralDisk disk : input.getEphemeralDisks()) {
          volumes.add(new VolumeImpl(null, Volume.Type.LOCAL, new Integer(disk.getDiskGb()).floatValue(), null, true,
