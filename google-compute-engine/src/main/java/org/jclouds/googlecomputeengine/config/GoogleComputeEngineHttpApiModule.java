@@ -22,14 +22,18 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Suppliers.compose;
 
 import java.net.URI;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import com.google.common.base.Suppliers;
+import com.google.common.collect.ImmutableList;
 import org.jclouds.domain.Credentials;
 import org.jclouds.googlecomputeengine.GoogleComputeEngineApi;
 import org.jclouds.googlecomputeengine.domain.Operation;
+import org.jclouds.googlecomputeengine.domain.Project;
 import org.jclouds.googlecomputeengine.handlers.GoogleComputeEngineErrorHandler;
 import org.jclouds.googlecomputeengine.predicates.OperationDonePredicate;
 import org.jclouds.http.HttpErrorHandler;
@@ -78,14 +82,22 @@ public class GoogleComputeEngineHttpApiModule extends HttpApiModule<GoogleComput
    @Provides
    @Singleton
    @UserProject
-   public Supplier<String> supplyProject(@org.jclouds.location.Provider final Supplier<Credentials> creds) {
-      return compose(new Function<Credentials, String>() {
-         public String apply(Credentials in) {
-            checkState(in.identity.indexOf("@") != 1, "identity should be in project_id@developer.gserviceaccount.com" +
-                    " format");
-            return Iterables.get(Splitter.on("@").split(in.identity), 0);
+   public Supplier<String> supplyProject(@org.jclouds.location.Provider final Supplier<Credentials> creds, final GoogleComputeEngineApi googleComputeEngineApi) {
+      return Suppliers.memoize(new Supplier<String>() {
+         @Override
+         public String get() {
+            List<String> split = ImmutableList.copyOf(Splitter.on("@").split(creds.get().identity));
+
+            // If identity does not contain an "@", then use it directly
+            if (split.size() == 1)
+               return split.get(0);
+
+            // Otherwise assume before the @ is a project ID, and query the API to get the project name
+            String tempProjectName = Iterables.get(split, 0);
+            Project project = googleComputeEngineApi.getProjectApi().get(tempProjectName);
+            return project.getName();
          }
-      }, creds);
+      });
    }
 
    @Provides
