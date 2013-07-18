@@ -111,16 +111,16 @@ public class GoogleComputeEngineParserModule extends AbstractModule {
 
       private static class OperationInternal extends Operation {
          @ConstructorProperties({
-                 "id", "creationTimestamp", "selfLink", "name", "description", "targetLink", "targetId",
+                 "id", "creationTimestamp", "selfLink", "name", "description", "targetLink", "targetId", "zone",
                  "clientOperationId", "status", "statusMessage", "user", "progress", "insertTime", "startTime",
                  "endTime", "httpErrorStatusCode", "httpErrorMessage", "operationType"
          })
          private OperationInternal(String id, Date creationTimestamp, URI selfLink, String name,
-                                   String description, URI targetLink, String targetId, String clientOperationId,
+                                   String description, URI targetLink, String targetId, URI zoneLink, String clientOperationId,
                                    Status status, String statusMessage, String user, int progress, Date insertTime,
                                    Date startTime, Date endTime, int httpErrorStatusCode, String httpErrorMessage,
                                    String operationType) {
-            super(id, creationTimestamp, selfLink, name, description, targetLink, targetId, clientOperationId,
+            super(id, creationTimestamp, selfLink, name, description, targetLink, targetId, zoneLink, clientOperationId,
                     status, statusMessage, user, progress, insertTime, startTime, endTime, httpErrorStatusCode,
                     httpErrorMessage, operationType, null);
          }

@@ -47,14 +47,17 @@ public class DiskApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
    private int sizeGb = 1;
 
    private DiskApi api() {
-      return api.getDiskApiForProject(userProject.get());
+      String projectName = userProject.get();
+      return api.getDiskApiForProjectAndZone(projectName, DEFAULT_ZONE_NAME);
    }
 
    @Test(groups = "live")
    public void testInsertDisk() {
-      Project project = api.getProjectApi().get(userProject.get());
+      DiskApi api1 = api();
+      String projectName = userProject.get();
+      Project project = api.getProjectApi().get(projectName);
       zoneUrl = getDefaultZoneUrl(project.getName());
-      assertOperationDoneSucessfully(api().createInZone(DISK_NAME, sizeGb, zoneUrl), TIME_WAIT);
+      assertOperationDoneSucessfully(api1.createInZone(DISK_NAME, sizeGb, zoneUrl), TIME_WAIT);
 
    }
 
