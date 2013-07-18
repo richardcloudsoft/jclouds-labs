@@ -139,7 +139,7 @@ public class InstanceTemplate {
     * @see org.jclouds.googlecomputeengine.domain.Instance#getDisks()
     */
    public InstanceTemplate addDisk(PersistentDisk.Mode mode, URI source) {
-      this.disks.add(new PersistentDisk(mode, source, null, null));
+      this.disks.add(new PersistentDisk(mode, source, null, null, null));
       return this;
    }
 
@@ -147,7 +147,15 @@ public class InstanceTemplate {
     * @see org.jclouds.googlecomputeengine.domain.Instance#getDisks()
     */
    public InstanceTemplate addDisk(PersistentDisk.Mode mode, URI source, String deviceName, Boolean deleteOnTerminate) {
-      this.disks.add(new PersistentDisk(mode, source, deviceName, deleteOnTerminate));
+      this.disks.add(new PersistentDisk(mode, source, deviceName, deleteOnTerminate, null));
+      return this;
+   }
+
+   /**
+    * @see org.jclouds.googlecomputeengine.domain.Instance#getDisks()
+    */
+   public InstanceTemplate addDisk(PersistentDisk.Mode mode, URI source, String deviceName, Boolean deleteOnTerminate, Boolean boot) {
+      this.disks.add(new PersistentDisk(mode, source, deviceName, deleteOnTerminate, boot));
       return this;
    }
 
@@ -352,17 +360,19 @@ public class InstanceTemplate {
          READ_ONLY
       }
 
-      public PersistentDisk(Mode mode, URI source, String deviceName, Boolean deleteOnTerminate) {
+      public PersistentDisk(Mode mode, URI source, String deviceName, Boolean deleteOnTerminate, Boolean boot) {
          this.mode = checkNotNull(mode, "mode");
          this.source = checkNotNull(source, "source");
          this.deviceName = deviceName;
          this.deleteOnTerminate = deleteOnTerminate;
+         this.boot = boot;
       }
 
       private final Mode mode;
       private final URI source;
       private final Boolean deleteOnTerminate;
       private final String deviceName;
+      private final Boolean boot;
 
       /**
        * @return the mode in which to attach this disk, either READ_WRITE or READ_ONLY.
@@ -393,6 +403,13 @@ public class InstanceTemplate {
        */
       public boolean isDeleteOnTerminate() {
          return deleteOnTerminate;
+      }
+
+      /**
+       * @return If true, the disk is the boot disk.
+       */
+      public Boolean getBoot() {
+         return boot;
       }
    }
 

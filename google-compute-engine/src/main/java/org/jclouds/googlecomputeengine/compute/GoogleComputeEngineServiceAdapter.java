@@ -23,6 +23,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.util.concurrent.UncheckedTimeoutException;
@@ -115,14 +116,6 @@ public class GoogleComputeEngineServiceAdapter implements ComputeServiceAdapter<
       InstanceTemplate instanceTemplate = InstanceTemplate.builder()
               .forMachineType(machineType.getSelfLink());
 
-      if (machineType.getEphemeralDisks() == null || machineType.getEphemeralDisks().isEmpty()) {
-         // The machine needs a boot disk - create a 1GB drive for this purpose
-         // TODO need to delete it at end!
-         Operation operation = api.getDiskApiForProjectAndZone(userProject.get(), zoneName).createInZone(name + "-disk", 1, null);
-         waitOperationDone(operation);
-         instanceTemplate.addDisk(InstanceTemplate.PersistentDisk.Mode.READ_WRITE, operation.getTargetLink());
-      }
-
       if (options.isEnableNat()) {
          instanceTemplate.addNetworkInterface(options.getNetwork().get(), Type.ONE_TO_ONE_NAT);
       } else {
@@ -161,7 +154,13 @@ public class GoogleComputeEngineServiceAdapter implements ComputeServiceAdapter<
 
    @Override
    public Iterable<MachineType> listHardwareProfiles() {
-      return api.getMachineTypeApiForProject(userProject.get()).list().concat();
+      FluentIterable<MachineType> machineTypes = api.getMachineTypeApiForProject(userProject.get()).list().concat();
+      return machineTypes.filter(new Predicate<MachineType>() {
+         @Override
+         public boolean apply(org.jclouds.googlecomputeengine.domain.MachineType input) {
+            return input != null && !input.getEphemeralDisks().isEmpty();
+         }
+      });
    }
 
    @Override

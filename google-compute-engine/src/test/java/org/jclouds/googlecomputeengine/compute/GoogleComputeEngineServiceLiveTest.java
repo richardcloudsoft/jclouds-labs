@@ -23,6 +23,8 @@ import static org.testng.Assert.assertTrue;
 
 import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.internal.BaseComputeServiceLiveTest;
+import org.jclouds.logging.config.LoggingModule;
+import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 import org.jclouds.sshj.config.SshjSshClientModule;
 import org.testng.annotations.Test;
 
@@ -32,11 +34,18 @@ import com.google.inject.Module;
 /**
  * @author David Alves
  */
-@Test(groups = "qlive", singleThreaded = true)
+@Test(groups = "live", singleThreaded = true)
 public class GoogleComputeEngineServiceLiveTest extends BaseComputeServiceLiveTest {
 
    public GoogleComputeEngineServiceLiveTest() {
       provider = "google-compute-engine";
+   }
+
+   @Override
+   protected LoggingModule getLoggingModule() {
+      LoggingModule loggingModule = new SLF4JLoggingModule();
+      loggingModule.createLoggerFactory().getLogger(getClass().getCanonicalName()).warn("This is the logging module that I'm using");
+      return loggingModule;
    }
 
    /**

@@ -115,11 +115,20 @@
                                     <goal>test</goal>
                                 </goals>
                                 <configuration>
+                                    <excludes>
+                                        <exclude>**/*IntegrationTest.java</exclude>
+                                        <exclude>**/*ApiLiveTest.java</exclude>
+                                    </excludes>
+                                    <includes>
+                                        <include>**/*ServiceLiveTest.java</include>
+                                    </includes>
                                     <systemPropertyVariables>
                                         <test.google-compute-engine.identity>${test.google-compute-engine.identity}</test.google-compute-engine.identity>
                                         <test.google-compute-engine.credential>${test.google-compute-engine.credential}</test.google-compute-engine.credential>
                                         <test.google-compute-engine.api-version>${test.google-compute-engine.api-version}</test.google-compute-engine.api-version>
                                         <test.google-compute-engine.build-version>${test.google-compute-engine.build-version}</test.google-compute-engine.build-version>
+                                        <!--<jclouds.proxy-host>localhost</jclouds.proxy-host>-->
+                                        <!--<jclouds.proxy-port>8888</jclouds.proxy-port>-->
                                     </systemPropertyVariables>
                                 </configuration>
                             </execution>
