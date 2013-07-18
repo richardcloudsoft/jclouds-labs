@@ -23,6 +23,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.util.concurrent.UncheckedTimeoutException;
@@ -152,7 +153,13 @@ public class GoogleComputeEngineServiceAdapter implements ComputeServiceAdapter<
 
    @Override
    public Iterable<MachineType> listHardwareProfiles() {
-      return api.getMachineTypeApiForProject(userProject.get()).list().concat();
+      FluentIterable<MachineType> machineTypes = api.getMachineTypeApiForProject(userProject.get()).list().concat();
+      return machineTypes.filter(new Predicate<MachineType>() {
+         @Override
+         public boolean apply(org.jclouds.googlecomputeengine.domain.MachineType input) {
+            return input != null && !input.getEphemeralDisks().isEmpty();
+         }
+      });
    }
 
    @Override
