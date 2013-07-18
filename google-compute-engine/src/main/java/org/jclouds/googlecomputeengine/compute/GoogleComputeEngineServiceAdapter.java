@@ -109,10 +109,10 @@ public class GoogleComputeEngineServiceAdapter implements ComputeServiceAdapter<
       GoogleComputeEngineTemplateOptions options = GoogleComputeEngineTemplateOptions.class.cast(template.getOptions()).clone();
       checkState(options.getNetwork().isPresent(), "network was not present in template options");
       Hardware hardware = checkNotNull(template.getHardware(), "hardware must be set");
-      URI machineType = checkNotNull(hardware.getUri(), "hardware uri must be set");
+      MachineType machineType = api.getMachineTypeApiForProject(userProject.get()).get(hardware.getName());
 
       InstanceTemplate instanceTemplate = InstanceTemplate.builder()
-              .forMachineType(machineType);
+              .forMachineType(machineType.getSelfLink());
 
       if (options.isEnableNat()) {
          instanceTemplate.addNetworkInterface(options.getNetwork().get(), Type.ONE_TO_ONE_NAT);
@@ -128,8 +128,8 @@ public class GoogleComputeEngineServiceAdapter implements ComputeServiceAdapter<
       instanceTemplate.serviceAccounts(options.getServiceAccounts());
       instanceTemplate.image(checkNotNull(template.getImage().getUri(), "image URI is null"));
 
-      String zoneName = template.getLocation().getId();
-      Operation operation = api.getInstanceApiForProject(userProject.get())
+      final String zoneName = template.getLocation().getId();
+      Operation operation = api.getInstanceApiForProjectAndZone(userProject.get(), zoneName)
               .createInZone(name, instanceTemplate, zoneName);
 
       if (options.shouldBlockUntilRunning()) {
@@ -142,7 +142,7 @@ public class GoogleComputeEngineServiceAdapter implements ComputeServiceAdapter<
       retry(new Predicate<AtomicReference<Instance>>() {
          @Override
          public boolean apply(AtomicReference<Instance> input) {
-            input.set(api.getInstanceApiForProject(userProject.get()).get(name));
+            input.set(api.getInstanceApiForProjectAndZone(userProject.get(), zoneName).get(name));
             return input.get() != null;
          }
       }, operationCompleteCheckTimeout, operationCompleteCheckInterval, MILLISECONDS).apply(instance);
@@ -184,12 +184,16 @@ public class GoogleComputeEngineServiceAdapter implements ComputeServiceAdapter<
    @Override
    public Instance getNode(String id) {
       ZoneAndId zoneAndId = ZoneAndId.fromSlashEncoded(id);
-      return api.getInstanceApiForProject(userProject.get()).get(zoneAndId.getId());
+      return api.getInstanceApiForProjectAndZone(userProject.get(), zoneAndId.getZone()).get(zoneAndId.getId());
    }
 
    @Override
    public Iterable<Instance> listNodes() {
-      return api.getInstanceApiForProject(userProject.get()).list().concat();
+      ImmutableSet.Builder<Instance> builder = ImmutableSet.builder();
+      for(Zone zone : api.getZoneApiForProject(userProject.get()).list().concat()) {
+         builder.addAll(api.getInstanceApiForProjectAndZone(userProject.get(), zone.getName()).list().concat());
+      }
+      return builder.build();
    }
 
    @Override
@@ -206,7 +210,7 @@ public class GoogleComputeEngineServiceAdapter implements ComputeServiceAdapter<
    @Override
    public void destroyNode(final String id) {
       ZoneAndId zoneAndId = ZoneAndId.fromSlashEncoded(id);
-      waitOperationDone(api.getInstanceApiForProject(userProject.get()).delete(zoneAndId.getId()));
+      waitOperationDone(api.getInstanceApiForProjectAndZone(userProject.get(), zoneAndId.getZone()).delete(zoneAndId.getId()));
    }
 
    @Override

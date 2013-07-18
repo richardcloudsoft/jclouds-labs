@@ -46,7 +46,7 @@ public class OperationApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
    private Operation deleteOperation;
 
    private OperationApi api() {
-      return api.getOperationApiForProject(userProject.get());
+      return api.getGlobalOperationApiForProject(userProject.get());
    }
 
 

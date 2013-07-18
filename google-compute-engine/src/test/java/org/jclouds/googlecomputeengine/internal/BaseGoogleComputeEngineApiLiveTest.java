@@ -45,14 +45,14 @@ import com.google.inject.TypeLiteral;
  */
 public class BaseGoogleComputeEngineApiLiveTest extends BaseApiLiveTest<GoogleComputeEngineApi> {
 
-   protected static final String API_URL_PREFIX = "https://www.googleapis.com/compute/v1beta13/projects/";
+   protected static final String API_URL_PREFIX = "https://www.googleapis.com/compute/v1beta14/projects/";
    protected static final String ZONE_API_URL_SUFFIX = "/zones/";
    protected static final String DEFAULT_ZONE_NAME = "us-central1-a";
 
-   protected static final String NETWORK_API_URL_SUFFIX = "/networks/";
+   protected static final String NETWORK_API_URL_SUFFIX = "/global/networks/";
    protected static final String DEFAULT_NETWORK_NAME = "live-test-network";
 
-   protected static final String MACHINE_TYPE_API_URL_SUFFIX = "/machineTypes/";
+   protected static final String MACHINE_TYPE_API_URL_SUFFIX = "/global/machineTypes/";
    protected static final String DEFAULT_MACHINE_TYPE_NAME = "n1-standard-1";
 
    protected static final String GOOGLE_PROJECT = "google";
@@ -110,7 +110,11 @@ public class BaseGoogleComputeEngineApiLiveTest extends BaseApiLiveTest<GoogleCo
    }
 
    protected URI getDiskUrl(String project, String diskName) {
-      return URI.create(API_URL_PREFIX + project + "/disks/" + diskName);
+      return URI.create(API_URL_PREFIX + project + "/zones/" + DEFAULT_ZONE_NAME + "/disks/" + diskName);
+   }
+
+   protected URI getImageUrl(String project, String imageName) {
+      return URI.create(API_URL_PREFIX + project + "/global/images/" + imageName);
    }
 
    protected static Operation waitOperationDone(Predicate<AtomicReference<Operation>> operationDonePredicate,

@@ -19,13 +19,16 @@
 
 package org.jclouds.googlecomputeengine.predicates;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
+import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import com.google.inject.Inject;
 import org.jclouds.googlecomputeengine.GoogleComputeEngineApi;
 import org.jclouds.googlecomputeengine.config.UserProject;
 import org.jclouds.googlecomputeengine.domain.Operation;
 
+import java.net.URI;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -49,7 +52,16 @@ public class OperationDonePredicate implements Predicate<AtomicReference<Operati
    @Override
    public boolean apply(AtomicReference<Operation> input) {
       checkNotNull(input, "input");
-      Operation current = api.getOperationApiForProject(project.get()).get(input.get().getName());
+      Optional<URI> zoneLink = input.get().getZoneLink();
+      Operation current;
+      if (zoneLink.isPresent()) {
+         String zone = zoneLink.get().toString();
+         int pos = zone.lastIndexOf('/');
+         zone = zone.substring(pos + 1);
+         current = api.getOperationApiForProjectAndZone(project.get(), zone).get(input.get().getName());
+      } else {
+         current = api.getGlobalOperationApiForProject(project.get()).get(input.get().getName());
+      }
       switch (current.getStatus()) {
          case DONE:
             input.set(current);

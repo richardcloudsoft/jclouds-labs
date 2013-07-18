@@ -55,7 +55,7 @@ import static org.testng.AssertJUnit.assertNull;
 @Test(groups = "unit")
 public class FirewallApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
 
-   public static final String FIREWALLS_RESOURCE_URL = MYPROJECT_BASE_URL + "/firewalls";
+   public static final String FIREWALLS_RESOURCE_URL = MYPROJECT_BASE_URL + "/global/firewalls";
 
    public static final HttpRequest GET_FIREWALL_REQUEST = HttpRequest
            .builder()

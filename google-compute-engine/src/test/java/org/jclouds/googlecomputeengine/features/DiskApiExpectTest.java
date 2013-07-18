@@ -42,7 +42,7 @@ import static org.testng.AssertJUnit.assertNull;
 @Test(groups = "unit")
 public class DiskApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
 
-   static final String DISKS_RESOURCE_URL = MYPROJECT_BASE_URL + "/disks";
+   static final String DISKS_RESOURCE_URL = MYPROJECT_BASE_URL + "/zones/" + ZONE_US_CENTRAL1_A + "/disks";
 
    public void testGetDiskResponseIs2xx() throws Exception {
       HttpRequest get = HttpRequest
@@ -56,7 +56,7 @@ public class DiskApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
               .payload(payloadFromResource("/disk_get.json")).build();
 
       DiskApi api = requestsSendResponses(requestForScopes(COMPUTE_READONLY_SCOPE),
-              TOKEN_RESPONSE, get, operationResponse).getDiskApiForProject("myproject");
+              TOKEN_RESPONSE, get, operationResponse).getDiskApiForProjectAndZone("myproject", ZONE_US_CENTRAL1_A);
 
       assertEquals(api.get("testimage1"),
               new ParseDiskTest().expected());
@@ -73,7 +73,7 @@ public class DiskApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
       HttpResponse operationResponse = HttpResponse.builder().statusCode(404).build();
 
       DiskApi api = requestsSendResponses(requestForScopes(COMPUTE_READONLY_SCOPE),
-              TOKEN_RESPONSE, get, operationResponse).getDiskApiForProject("myproject");
+              TOKEN_RESPONSE, get, operationResponse).getDiskApiForProjectAndZone("myproject", ZONE_US_CENTRAL1_A);
 
       assertNull(api.get("testimage1"));
    }
@@ -93,7 +93,7 @@ public class DiskApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
 
       DiskApi api = requestsSendResponses(requestForScopes(COMPUTE_SCOPE),
               TOKEN_RESPONSE, insert,
-              insertDiskResponse).getDiskApiForProject("myproject");
+              insertDiskResponse).getDiskApiForProjectAndZone("myproject", ZONE_US_CENTRAL1_A);
 
       assertEquals(api.createInZone("testimage1", 1, URI.create(ZoneApiExpectTest.ZONES_RESOURCE_URL + "/us-central1-a"))
               , new ParseOperationTest().expected());
@@ -111,7 +111,7 @@ public class DiskApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
               .payload(payloadFromResource("/operation.json")).build();
 
       DiskApi api = requestsSendResponses(requestForScopes(COMPUTE_SCOPE),
-              TOKEN_RESPONSE, delete, deleteResponse).getDiskApiForProject("myproject");
+              TOKEN_RESPONSE, delete, deleteResponse).getDiskApiForProjectAndZone("myproject", ZONE_US_CENTRAL1_A);
 
       assertEquals(api.delete("testimage1"),
               new ParseOperationTest().expected());
@@ -128,7 +128,7 @@ public class DiskApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
       HttpResponse deleteResponse = HttpResponse.builder().statusCode(404).build();
 
       DiskApi api = requestsSendResponses(requestForScopes(COMPUTE_SCOPE),
-              TOKEN_RESPONSE, delete, deleteResponse).getDiskApiForProject("myproject");
+              TOKEN_RESPONSE, delete, deleteResponse).getDiskApiForProjectAndZone("myproject", ZONE_US_CENTRAL1_A);
 
       assertNull(api.delete("testimage1"));
    }
@@ -145,7 +145,7 @@ public class DiskApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
               .payload(payloadFromResource("/disk_list.json")).build();
 
       DiskApi api = requestsSendResponses(requestForScopes(COMPUTE_READONLY_SCOPE),
-              TOKEN_RESPONSE, list, operationResponse).getDiskApiForProject("myproject");
+              TOKEN_RESPONSE, list, operationResponse).getDiskApiForProjectAndZone("myproject", ZONE_US_CENTRAL1_A);
 
       assertEquals(api.listFirstPage().toString(),
               new ParseDiskListTest().expected().toString());
@@ -162,7 +162,7 @@ public class DiskApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
       HttpResponse operationResponse = HttpResponse.builder().statusCode(404).build();
 
       DiskApi api = requestsSendResponses(requestForScopes(COMPUTE_READONLY_SCOPE),
-              TOKEN_RESPONSE, list, operationResponse).getDiskApiForProject("myproject");
+              TOKEN_RESPONSE, list, operationResponse).getDiskApiForProjectAndZone("myproject", ZONE_US_CENTRAL1_A);
 
       assertTrue(api.list().concat().isEmpty());
    }
