@@ -20,7 +20,9 @@
 package org.jclouds.googlecomputeengine.config;
 
 import com.google.common.collect.ForwardingMap;
+import com.google.common.collect.ForwardingSet;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Range;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
@@ -70,6 +72,7 @@ public class GoogleComputeEngineParserModule extends AbstractModule {
    public Map<Type, Object> provideCustomAdapterBindings() {
       return new ImmutableMap.Builder<Type, Object>()
               .put(Metadata.class, new MetadataTypeAdapter())
+              .put(Tags.class, new TagsTypeAdapter())
               .put(Operation.class, new OperationTypeAdapter())
               .put(Header.class, new HeaderTypeAdapter())
               .put(ClaimSet.class, new ClaimSetTypeAdapter())
@@ -208,7 +211,7 @@ public class GoogleComputeEngineParserModule extends AbstractModule {
                  "status", "statusMessage", "zone", "networkInterfaces", "metadata", "serviceAccounts"
          })
          private InstanceInternal(String id, Date creationTimestamp, URI selfLink, String name, String description,
-                                  Set<String> tags, URI image, URI machineType, Status status, String statusMessage,
+                                  Tags tags, URI image, URI machineType, Status status, String statusMessage,
                                   URI zone, Set<NetworkInterface> networkInterfaces, Metadata metadata,
                                   Set<ServiceAccount> serviceAccounts) {
             super(id, creationTimestamp, selfLink, name, description, tags, image, machineType,
@@ -265,6 +268,54 @@ public class GoogleComputeEngineParserModule extends AbstractModule {
 
       @Override
       protected Map<String, String> delegate() {
+         return delegate;
+      }
+   }
+
+   /**
+    * Parser for Tags.
+    */
+   @Singleton
+   private static class TagsTypeAdapter implements JsonDeserializer<Tags>, JsonSerializer<Tags> {
+
+
+      @Override
+      public Tags deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws
+              JsonParseException {
+         ImmutableSet.Builder<String> builder = ImmutableSet.builder();
+         JsonObject tags = json.getAsJsonObject();
+         JsonArray items = tags.getAsJsonArray("items");
+         if (items != null) {
+            for (JsonElement element : items) {
+               builder.add(element.getAsString());
+            }
+         }
+         return new Tags(builder.build());
+      }
+
+      @Override
+      public JsonElement serialize(Tags src, Type typeOfSrc, JsonSerializationContext context) {
+         JsonObject tagsObject = new JsonObject();
+         tagsObject.add("kind", new JsonPrimitive("compute#tags"));
+         JsonArray items = new JsonArray();
+         for (String entry : src) {
+            items.add(new JsonPrimitive(entry));
+         }
+         tagsObject.add("items", items);
+         return tagsObject;
+      }
+   }
+
+   public static class Tags extends ForwardingSet<String> {
+
+      private final Set<String> delegate;
+
+      public Tags(Set<String> delegate) {
+         this.delegate = delegate;
+      }
+
+      @Override
+      protected Set<String> delegate() {
          return delegate;
       }
    }
