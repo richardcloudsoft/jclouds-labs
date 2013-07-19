@@ -33,6 +33,8 @@ import org.jclouds.compute.domain.Hardware;
 import org.jclouds.compute.domain.Template;
 import org.jclouds.compute.options.TemplateOptions;
 import org.jclouds.compute.reference.ComputeServiceConstants;
+import org.jclouds.domain.Location;
+import org.jclouds.domain.LocationScope;
 import org.jclouds.domain.LoginCredentials;
 import org.jclouds.googlecomputeengine.GoogleComputeEngineApi;
 import org.jclouds.googlecomputeengine.compute.options.GoogleComputeEngineTemplateOptions;
@@ -110,6 +112,8 @@ public class GoogleComputeEngineServiceAdapter implements ComputeServiceAdapter<
       checkState(options.getNetwork().isPresent(), "network was not present in template options");
       Hardware hardware = checkNotNull(template.getHardware(), "hardware must be set");
       MachineType machineType = api.getMachineTypeApiForProject(userProject.get()).get(hardware.getName());
+      Location location = template.getLocation();
+      checkState(location.getScope() == LocationScope.ZONE, "location must be a ZONE, this location is not valid: %s", location);
 
       InstanceTemplate instanceTemplate = InstanceTemplate.builder()
               .forMachineType(machineType.getSelfLink());
@@ -128,7 +132,7 @@ public class GoogleComputeEngineServiceAdapter implements ComputeServiceAdapter<
       instanceTemplate.serviceAccounts(options.getServiceAccounts());
       instanceTemplate.image(checkNotNull(template.getImage().getUri(), "image URI is null"));
 
-      final String zoneName = template.getLocation().getId();
+      final String zoneName = location.getId();
       Operation operation = api.getInstanceApiForProjectAndZone(userProject.get(), zoneName)
               .createInZone(name, instanceTemplate, zoneName);
 

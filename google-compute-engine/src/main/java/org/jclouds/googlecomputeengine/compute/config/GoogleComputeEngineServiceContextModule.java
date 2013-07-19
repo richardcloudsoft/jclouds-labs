@@ -27,6 +27,7 @@ import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
+import com.google.inject.Scopes;
 import com.google.inject.TypeLiteral;
 import org.jclouds.collect.Memoized;
 import org.jclouds.compute.ComputeService;
@@ -57,6 +58,8 @@ import org.jclouds.googlecomputeengine.domain.Image;
 import org.jclouds.googlecomputeengine.domain.Instance;
 import org.jclouds.googlecomputeengine.domain.MachineType;
 import org.jclouds.googlecomputeengine.domain.Zone;
+import org.jclouds.location.suppliers.ImplicitLocationSupplier;
+import org.jclouds.location.suppliers.implicit.OnlyLocationOrFirstZone;
 
 import javax.inject.Singleton;
 import java.net.URI;
@@ -113,6 +116,7 @@ public class GoogleComputeEngineServiceContextModule
 
       install(new LocationsFromComputeServiceAdapterModule<Instance, MachineType, Image, Zone>() {});
 
+      bind(ImplicitLocationSupplier.class).to(OnlyLocationOrFirstZone.class).in(Scopes.SINGLETON);
    }
 
    @Provides
