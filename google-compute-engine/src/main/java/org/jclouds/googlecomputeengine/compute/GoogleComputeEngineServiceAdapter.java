@@ -23,7 +23,6 @@ import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.util.concurrent.UncheckedTimeoutException;
@@ -37,6 +36,7 @@ import org.jclouds.domain.Location;
 import org.jclouds.domain.LocationScope;
 import org.jclouds.domain.LoginCredentials;
 import org.jclouds.googlecomputeengine.GoogleComputeEngineApi;
+import org.jclouds.googlecomputeengine.compute.functions.FirewallTagNamingConvention;
 import org.jclouds.googlecomputeengine.compute.options.GoogleComputeEngineTemplateOptions;
 import org.jclouds.googlecomputeengine.config.UserProject;
 import org.jclouds.googlecomputeengine.domain.Image;
@@ -51,7 +51,6 @@ import org.jclouds.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.inject.Named;
-import java.net.URI;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -81,6 +80,7 @@ public class GoogleComputeEngineServiceAdapter implements ComputeServiceAdapter<
    private final Predicate<AtomicReference<Operation>> retryOperationDonePredicate;
    private final long operationCompleteCheckInterval;
    private final long operationCompleteCheckTimeout;
+   private final FirewallTagNamingConvention.Factory firewallTagNamingConvention;
 
    @Inject
    public GoogleComputeEngineServiceAdapter(GoogleComputeEngineApi api,
@@ -89,7 +89,8 @@ public class GoogleComputeEngineServiceAdapter implements ComputeServiceAdapter<
                                                     ImmutableMap.Builder<String, String>> metatadaFromTemplateOptions,
                                             Predicate<AtomicReference<Operation>> operationDonePredicate,
                                             @Named(OPERATION_COMPLETE_INTERVAL) Long operationCompleteCheckInterval,
-                                            @Named(OPERATION_COMPLETE_TIMEOUT) Long operationCompleteCheckTimeout) {
+                                            @Named(OPERATION_COMPLETE_TIMEOUT) Long operationCompleteCheckTimeout,
+                                            FirewallTagNamingConvention.Factory firewallTagNamingConvention) {
       this.api = checkNotNull(api, "google compute api");
       this.userProject = checkNotNull(userProject, "user project name");
       this.metatadaFromTemplateOptions = checkNotNull(metatadaFromTemplateOptions,
@@ -100,6 +101,7 @@ public class GoogleComputeEngineServiceAdapter implements ComputeServiceAdapter<
               "operation completed check timeout");
       this.retryOperationDonePredicate = retry(operationDonePredicate, operationCompleteCheckTimeout,
               operationCompleteCheckInterval, TimeUnit.MILLISECONDS);
+      this.firewallTagNamingConvention = firewallTagNamingConvention;
    }
 
    @Override
@@ -129,6 +131,13 @@ public class GoogleComputeEngineServiceAdapter implements ComputeServiceAdapter<
       ImmutableMap.Builder<String, String> metadataBuilder = metatadaFromTemplateOptions.apply(options);
       instanceTemplate.metadata(metadataBuilder.build());
       instanceTemplate.tags(options.getTags());
+
+      // Add tags for security groups
+      FirewallTagNamingConvention naming = firewallTagNamingConvention.get(group);
+      for(Integer port : options.getInboundPorts()) {
+         instanceTemplate.addTag(naming.name(port));
+      }
+
       instanceTemplate.serviceAccounts(options.getServiceAccounts());
       instanceTemplate.image(checkNotNull(template.getImage().getUri(), "image URI is null"));
 

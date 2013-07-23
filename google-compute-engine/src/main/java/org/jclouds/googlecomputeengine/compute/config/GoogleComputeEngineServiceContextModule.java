@@ -43,6 +43,7 @@ import org.jclouds.googlecomputeengine.GoogleComputeEngineApi;
 import org.jclouds.googlecomputeengine.compute.GoogleComputeEngineService;
 import org.jclouds.googlecomputeengine.compute.GoogleComputeEngineServiceAdapter;
 import org.jclouds.googlecomputeengine.compute.functions.BuildInstanceMetadata;
+import org.jclouds.googlecomputeengine.compute.functions.FirewallTagNamingConvention;
 import org.jclouds.googlecomputeengine.compute.functions.GoogleComputeEngineImageToImage;
 import org.jclouds.googlecomputeengine.compute.functions.InstanceToNodeMetadata;
 import org.jclouds.googlecomputeengine.compute.functions.MachineTypeToHardware;
@@ -117,6 +118,8 @@ public class GoogleComputeEngineServiceContextModule
       install(new LocationsFromComputeServiceAdapterModule<Instance, MachineType, Image, Zone>() {});
 
       bind(ImplicitLocationSupplier.class).to(OnlyLocationOrFirstZone.class).in(Scopes.SINGLETON);
+
+      this.bind(FirewallTagNamingConvention.Factory.class).in(Scopes.SINGLETON);
    }
 
    @Provides
