@@ -19,8 +19,10 @@
 
 package org.jclouds.googlecomputeengine.functions.internal;
 
-import com.google.common.base.Function;
-import com.google.inject.TypeLiteral;
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import javax.inject.Inject;
+
 import org.jclouds.collect.IterableWithMarker;
 import org.jclouds.googlecomputeengine.GoogleComputeEngineApi;
 import org.jclouds.googlecomputeengine.domain.ListPage;
@@ -29,18 +31,18 @@ import org.jclouds.googlecomputeengine.options.ListOptions;
 import org.jclouds.http.functions.ParseJson;
 import org.jclouds.json.Json;
 
-import javax.inject.Inject;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.base.Function;
+import com.google.inject.TypeLiteral;
 
 /**
  * @author David Alves
  */
-public class ParseOperations extends ParseJson<ListPage<Operation>> {
+public class ParseGlobalOperations extends ParseJson<ListPage<Operation>> {
 
    @Inject
-   public ParseOperations(Json json) {
-      super(json, new TypeLiteral<ListPage<Operation>>() {});
+   public ParseGlobalOperations(Json json) {
+      super(json, new TypeLiteral<ListPage<Operation>>() {
+      });
    }
 
    public static class ToPagedIterable extends BaseToPagedIterable<Operation, ToPagedIterable> {
@@ -59,7 +61,7 @@ public class ParseOperations extends ParseJson<ListPage<Operation>> {
 
             @Override
             public IterableWithMarker<Operation> apply(Object input) {
-               return api.getOperationApiForProject(projectName).listAtMarker(input.toString(), options);
+               return api.getGlobalOperationApiForProject(projectName).listAtMarker(input.toString(), options);
             }
          };
       }

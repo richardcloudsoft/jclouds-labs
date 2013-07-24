@@ -66,7 +66,7 @@ import org.jclouds.rest.binders.BindToJsonPayload;
  * <p/>
  *
  * @author David Alves
- * @see <a href="https://developers.google.com/compute/docs/reference/v1beta13/firewalls"/>
+ * @see <a href="https://developers.google.com/compute/docs/reference/v1beta15/firewalls"/>
  */
 @SkipEncoding({'/', '='})
 @RequestFilters(OAuthAuthenticator.class)
@@ -80,7 +80,7 @@ public interface FirewallApi {
    @Named("Firewalls:get")
    @GET
    @Consumes(MediaType.APPLICATION_JSON)
-   @Path("/firewalls/{firewall}")
+   @Path("/global/firewalls/{firewall}")
    @OAuthScopes(COMPUTE_READONLY_SCOPE)
    @Fallback(NullOnNotFoundOr404.class)
    @Nullable
@@ -89,8 +89,8 @@ public interface FirewallApi {
    /**
     * Creates a firewall resource in the specified project using the data included in the request.
     *
-    * @param name the name of the firewall to be inserted.
-    * @param network the network to which to add the firewall
+    * @param name            the name of the firewall to be inserted.
+    * @param network         the network to which to add the firewall
     * @param firewallOptions the options of the firewall to add
     * @return an Operation resource. To check on the status of an operation, poll the Operations resource returned to
     *         you, and look for the status field.
@@ -99,7 +99,7 @@ public interface FirewallApi {
    @POST
    @Consumes(MediaType.APPLICATION_JSON)
    @Produces(MediaType.APPLICATION_JSON)
-   @Path("/firewalls")
+   @Path("/global/firewalls")
    @OAuthScopes({COMPUTE_SCOPE})
    @MapBinder(FirewallBinder.class)
    Operation createInNetwork(@PayloadParam("name") String name,
@@ -109,8 +109,8 @@ public interface FirewallApi {
    /**
     * Updates the specified firewall resource with the data included in the request.
     *
-    * @param firewallName the name firewall to be updated.
-    * @param firewallOptions     the new firewall.
+    * @param firewallName    the name firewall to be updated.
+    * @param firewallOptions the new firewall.
     * @return an Operation resource. To check on the status of an operation, poll the Operations resource returned to
     *         you, and look for the status field.
     */
@@ -118,7 +118,7 @@ public interface FirewallApi {
    @PUT
    @Consumes(MediaType.APPLICATION_JSON)
    @Produces(MediaType.APPLICATION_JSON)
-   @Path("/firewalls/{firewall}")
+   @Path("/global/firewalls/{firewall}")
    @OAuthScopes({COMPUTE_SCOPE})
    Operation update(@PathParam("firewall") String firewallName,
                     @BinderParam(BindToJsonPayload.class) FirewallOptions firewallOptions);
@@ -126,8 +126,8 @@ public interface FirewallApi {
    /**
     * Updates the specified firewall resource, with patch semantics, with the data included in the request.
     *
-    * @param firewallName the name firewall to be updated.
-    * @param firewallOptions     the new firewall.
+    * @param firewallName    the name firewall to be updated.
+    * @param firewallOptions the new firewall.
     * @return an Operation resource. To check on the status of an operation, poll the Operations resource returned to
     *         you, and look for the status field.
     */
@@ -135,7 +135,7 @@ public interface FirewallApi {
    @PATCH
    @Consumes(MediaType.APPLICATION_JSON)
    @Produces(MediaType.APPLICATION_JSON)
-   @Path("/firewalls/{firewall}")
+   @Path("/global/firewalls/{firewall}")
    @OAuthScopes({COMPUTE_SCOPE})
    Operation patch(@PathParam("firewall") String firewallName,
                    @BinderParam(BindToJsonPayload.class) FirewallOptions firewallOptions);
@@ -150,7 +150,7 @@ public interface FirewallApi {
    @Named("Firewalls:delete")
    @DELETE
    @Consumes(MediaType.APPLICATION_JSON)
-   @Path("/firewalls/{firewall}")
+   @Path("/global/firewalls/{firewall}")
    @OAuthScopes(COMPUTE_SCOPE)
    @Fallback(NullOnNotFoundOr404.class)
    Operation delete(@PathParam("firewall") String firewallName);
@@ -161,7 +161,7 @@ public interface FirewallApi {
    @Named("Firewalls:list")
    @GET
    @Consumes(MediaType.APPLICATION_JSON)
-   @Path("/firewalls")
+   @Path("/global/firewalls")
    @OAuthScopes(COMPUTE_READONLY_SCOPE)
    @ResponseParser(ParseFirewalls.class)
    @Fallback(EmptyIterableWithMarkerOnNotFoundOr404.class)
@@ -173,7 +173,7 @@ public interface FirewallApi {
    @Named("Firewalls:list")
    @GET
    @Consumes(MediaType.APPLICATION_JSON)
-   @Path("/firewalls")
+   @Path("/global/firewalls")
    @OAuthScopes(COMPUTE_READONLY_SCOPE)
    @ResponseParser(ParseFirewalls.class)
    @Fallback(EmptyIterableWithMarkerOnNotFoundOr404.class)
@@ -193,7 +193,7 @@ public interface FirewallApi {
    @Named("Firewalls:list")
    @GET
    @Consumes(MediaType.APPLICATION_JSON)
-   @Path("/firewalls")
+   @Path("/global/firewalls")
    @OAuthScopes(COMPUTE_READONLY_SCOPE)
    @ResponseParser(ParseFirewalls.class)
    @Fallback(EmptyIterableWithMarkerOnNotFoundOr404.class)
@@ -205,7 +205,7 @@ public interface FirewallApi {
    @Named("Firewalls:list")
    @GET
    @Consumes(MediaType.APPLICATION_JSON)
-   @Path("/firewalls")
+   @Path("/global/firewalls")
    @OAuthScopes(COMPUTE_READONLY_SCOPE)
    @ResponseParser(ParseFirewalls.class)
    @Transform(ParseFirewalls.ToPagedIterable.class)
@@ -222,7 +222,7 @@ public interface FirewallApi {
    @Named("Firewalls:list")
    @GET
    @Consumes(MediaType.APPLICATION_JSON)
-   @Path("/firewalls")
+   @Path("/global/firewalls")
    @OAuthScopes(COMPUTE_READONLY_SCOPE)
    @ResponseParser(ParseFirewalls.class)
    @Transform(ParseFirewalls.ToPagedIterable.class)

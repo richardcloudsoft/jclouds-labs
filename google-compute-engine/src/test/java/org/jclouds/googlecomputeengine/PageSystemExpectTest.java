@@ -19,6 +19,9 @@
 
 package org.jclouds.googlecomputeengine;
 
+import static org.jclouds.googlecomputeengine.GoogleComputeEngineConstants.COMPUTE_READONLY_SCOPE;
+import static org.testng.Assert.assertSame;
+
 import org.jclouds.collect.IterableWithMarker;
 import org.jclouds.collect.PagedIterable;
 import org.jclouds.googlecomputeengine.domain.Image;
@@ -28,9 +31,6 @@ import org.jclouds.googlecomputeengine.options.ListOptions;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
 import org.testng.annotations.Test;
-
-import static org.jclouds.googlecomputeengine.GoogleComputeEngineConstants.COMPUTE_READONLY_SCOPE;
-import static org.testng.Assert.assertSame;
 
 /**
  * A test specifically for the paging system. The code used is common to all list() methods so we're using Images
@@ -46,7 +46,7 @@ public class PageSystemExpectTest extends BaseGoogleComputeEngineApiExpectTest {
               .builder()
               .method("GET")
               .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/images")
+                      ".com/compute/v1beta15/projects/myproject/global/images")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -69,7 +69,7 @@ public class PageSystemExpectTest extends BaseGoogleComputeEngineApiExpectTest {
               .builder()
               .method("GET")
               .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/images?maxResults=3")
+                      ".com/compute/v1beta15/projects/myproject/global/images?maxResults=3")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -77,7 +77,7 @@ public class PageSystemExpectTest extends BaseGoogleComputeEngineApiExpectTest {
               .builder()
               .method("GET")
               .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/images?pageToken" +
+                      ".com/compute/v1beta15/projects/myproject/global/images?pageToken" +
                       "=CgVJTUFHRRIbZ29vZ2xlLmNlbnRvcy02LTItdjIwMTIwNjIx&maxResults=3")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
@@ -86,7 +86,7 @@ public class PageSystemExpectTest extends BaseGoogleComputeEngineApiExpectTest {
               .builder()
               .method("GET")
               .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/images?pageToken" +
+                      ".com/compute/v1beta15/projects/myproject/global/images?pageToken" +
                       "=CgVJTUFHRRIbZ29vZ2xlLmdjZWwtMTAtMDQtdjIwMTIxMTA2&maxResults=3")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();

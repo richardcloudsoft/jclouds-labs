@@ -19,27 +19,29 @@
 
 package org.jclouds.googlecomputeengine.domain;
 
-import com.google.common.annotations.Beta;
-import com.google.common.base.Objects;
-import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
-import org.jclouds.http.HttpResponse;
+import static com.google.common.base.Objects.equal;
+import static com.google.common.base.Objects.toStringHelper;
+import static com.google.common.base.Optional.fromNullable;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.beans.ConstructorProperties;
 import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
-import static com.google.common.base.Objects.equal;
-import static com.google.common.base.Objects.toStringHelper;
-import static com.google.common.base.Optional.fromNullable;
-import static com.google.common.base.Preconditions.checkNotNull;
+import org.jclouds.http.HttpResponse;
+import org.jclouds.javax.annotation.Nullable;
+
+import com.google.common.annotations.Beta;
+import com.google.common.base.Objects;
+import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
 
 /**
  * Describes an operation being executed on some Resource
  *
  * @author David Alves
- * @see <a href="https://developers.google.com/compute/docs/reference/v1beta13/operations"/>
+ * @see <a href="https://developers.google.com/compute/docs/reference/v1beta15/operations"/>
  */
 @Beta
 public class Operation extends Resource {
@@ -63,12 +65,14 @@ public class Operation extends Resource {
    private final Optional<HttpResponse> httpError;
    private final String operationType;
    private final List<Error> errors;
+   private final Optional<URI> zone;
+   private final Optional<URI> region;
 
    protected Operation(String id, Date creationTimestamp, URI selfLink, String name, String description,
                        URI targetLink, String targetId, String clientOperationId, Status status,
                        String statusMessage, String user, Integer progress, Date insertTime, Date startTime,
                        Date endTime, Integer httpErrorStatusCode, String httpErrorMessage, String operationType,
-                       List<Error> errors) {
+                       @Nullable List<Error> errors, URI region, URI zone) {
       super(Kind.OPERATION, id, creationTimestamp, selfLink, name, description);
       this.targetLink = checkNotNull(targetLink, "targetLink of %s", name);
       this.targetId = fromNullable(targetId);
@@ -88,6 +92,8 @@ public class Operation extends Resource {
               : Optional.<HttpResponse>absent();
       this.operationType = checkNotNull(operationType, "insertTime of %s", name);
       this.errors = errors == null ? ImmutableList.<Error>of() : ImmutableList.copyOf(errors);
+      this.region = fromNullable(region);
+      this.zone = fromNullable(zone);
    }
 
    /**
@@ -98,6 +104,14 @@ public class Operation extends Resource {
    }
 
    /**
+    * @return An optional identifier specified by the client when the mutation was initiated. Must be unique for all
+    *         operation resources in the project.
+    */
+   public Optional<String> getClientOperationId() {
+      return clientOperationId;
+   }
+
+   /**
     * @return unique target id which identifies a particular incarnation of the target.
     */
    public Optional<String> getTargetId() {
@@ -105,11 +119,17 @@ public class Operation extends Resource {
    }
 
    /**
-    * @return An optional identifier specified by the client when the mutation was initiated. Must be unique for all
-    *         operation resources in the project.
+    * @return region this operation is in, if any.
     */
-   public Optional<String> getClientOperationId() {
-      return clientOperationId;
+   public Optional<URI> getRegion() {
+      return region;
+   }
+
+   /**
+    * @return zone this operation is in, if any.
+    */
+   public Optional<URI> getZone() {
+      return zone;
    }
 
    /**
@@ -202,7 +222,9 @@ public class Operation extends Resource {
               .add("endTime", endTime.orNull())
               .add("httpError", httpError.orNull())
               .add("operationType", operationType)
-              .add("errors", errors);
+              .add("errors", errors)
+              .add("region", region.orNull())
+              .add("zone", zone.orNull());
    }
 
    /**
@@ -237,12 +259,30 @@ public class Operation extends Resource {
       private String httpErrorMessage;
       private String operationType;
       private ImmutableList.Builder<Error> errors = ImmutableList.builder();
+      private URI region;
+      private URI zone;
 
       /**
        * @see Operation#getTargetLink()
        */
       public Builder targetLink(URI targetLink) {
          this.targetLink = targetLink;
+         return self();
+      }
+
+      /**
+       * @see Operation#getRegion()
+       */
+      public Builder region(URI region) {
+         this.region = region;
+         return self();
+      }
+
+      /**
+       * @see Operation#getZone()
+       */
+      public Builder zone(URI zone) {
+         this.zone = zone;
          return self();
       }
 
@@ -368,7 +408,7 @@ public class Operation extends Resource {
          return new Operation(super.id, super.creationTimestamp, super.selfLink, super.name,
                  super.description, targetLink, targetId, clientOperationId, status, statusMessage, user, progress,
                  insertTime, startTime, endTime, httpErrorStatusCode, httpErrorMessage, operationType,
-                 errors.build());
+                 errors.build(), region, zone);
       }
 
       public Builder fromOperation(Operation in) {
@@ -385,7 +425,8 @@ public class Operation extends Resource {
                  .endTime(in.getEndTime().orNull())
                  .httpErrorStatusCode(in.getHttpError().isPresent() ? in.getHttpError().get().getStatusCode() : null)
                  .httpErrorMessage(in.getHttpError().isPresent() ? in.getHttpError().get().getMessage() : null)
-                 .operationType(in.getOperationType()).errors(in.getErrors());
+                 .operationType(in.getOperationType()).errors(in.getErrors())
+                 .zone(in.getZone().orNull()).region(in.getRegion().orNull());
       }
    }
 

@@ -54,7 +54,7 @@ import org.jclouds.rest.annotations.Transform;
  * <p/>
  *
  * @author David Alves
- * @see <a href="https://developers.google.com/compute/docs/reference/v1beta13/images"/>
+ * @see <a href="https://developers.google.com/compute/docs/reference/v1beta15/images"/>
  */
 @SkipEncoding({'/', '='})
 @RequestFilters(OAuthAuthenticator.class)
@@ -68,7 +68,7 @@ public interface ImageApi {
    @Named("Images:get")
    @GET
    @Consumes(MediaType.APPLICATION_JSON)
-   @Path("/images/{image}")
+   @Path("/global/images/{image}")
    @OAuthScopes(COMPUTE_READONLY_SCOPE)
    @Fallback(NullOnNotFoundOr404.class)
    @Nullable
@@ -84,7 +84,7 @@ public interface ImageApi {
    @Named("Images:delete")
    @DELETE
    @Consumes(MediaType.APPLICATION_JSON)
-   @Path("/images/{image}")
+   @Path("/global/images/{image}")
    @OAuthScopes(COMPUTE_SCOPE)
    @Fallback(NullOnNotFoundOr404.class)
    @Nullable
@@ -96,7 +96,7 @@ public interface ImageApi {
    @Named("Images:list")
    @GET
    @Consumes(MediaType.APPLICATION_JSON)
-   @Path("/images")
+   @Path("/global/images")
    @OAuthScopes(COMPUTE_READONLY_SCOPE)
    @ResponseParser(ParseImages.class)
    @Fallback(EmptyIterableWithMarkerOnNotFoundOr404.class)
@@ -108,7 +108,7 @@ public interface ImageApi {
    @Named("Images:list")
    @GET
    @Consumes(MediaType.APPLICATION_JSON)
-   @Path("/images")
+   @Path("/global/images")
    @OAuthScopes(COMPUTE_READONLY_SCOPE)
    @ResponseParser(ParseImages.class)
    @Fallback(EmptyIterableWithMarkerOnNotFoundOr404.class)
@@ -119,7 +119,6 @@ public interface ImageApi {
     * By default the list as a maximum size of 100, if no options are provided or ListOptions#getMaxResults() has not
     * been set.
     *
-    *
     * @param marker      marks the beginning of the next list page
     * @param listOptions listing options
     * @return a page of the list
@@ -129,11 +128,11 @@ public interface ImageApi {
    @Named("Images:list")
    @GET
    @Consumes(MediaType.APPLICATION_JSON)
-   @Path("/images")
+   @Path("/global/images")
    @OAuthScopes(COMPUTE_READONLY_SCOPE)
    @ResponseParser(ParseImages.class)
    @Fallback(EmptyIterableWithMarkerOnNotFoundOr404.class)
-   ListPage<Image> listAtMarker(@QueryParam("pageToken") @Nullable String marker, ListOptions options);
+   ListPage<Image> listAtMarker(@QueryParam("pageToken") @Nullable String marker, ListOptions listOptions);
 
    /**
     * A paged version of ImageApi#list()
@@ -145,7 +144,7 @@ public interface ImageApi {
    @Named("Images:list")
    @GET
    @Consumes(MediaType.APPLICATION_JSON)
-   @Path("/images")
+   @Path("/global/images")
    @OAuthScopes(COMPUTE_READONLY_SCOPE)
    @ResponseParser(ParseImages.class)
    @Transform(ParseImages.ToPagedIterable.class)
@@ -162,10 +161,11 @@ public interface ImageApi {
    @Named("Images:list")
    @GET
    @Consumes(MediaType.APPLICATION_JSON)
-   @Path("/images")
+   @Path("/global/images")
    @OAuthScopes(COMPUTE_READONLY_SCOPE)
    @ResponseParser(ParseImages.class)
    @Transform(ParseImages.ToPagedIterable.class)
    @Fallback(EmptyPagedIterableOnNotFoundOr404.class)
    PagedIterable<Image> list(ListOptions options);
+
 }

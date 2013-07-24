@@ -19,14 +19,14 @@
 
 package org.jclouds.googlecomputeengine.compute.functions;
 
-import org.jclouds.compute.domain.OsFamily;
-import org.jclouds.googlecomputeengine.domain.Image;
-import org.testng.annotations.Test;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertSame;
 
 import java.net.URI;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertSame;
+import org.jclouds.compute.domain.OsFamily;
+import org.jclouds.googlecomputeengine.domain.Image;
+import org.testng.annotations.Test;
 
 /**
  * @author David Alves

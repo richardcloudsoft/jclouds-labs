@@ -19,24 +19,6 @@
 
 package org.jclouds.googlecomputeengine.features;
 
-import com.google.common.base.Function;
-import com.google.common.collect.ImmutableSet;
-import org.jclouds.googlecomputeengine.domain.Firewall;
-import org.jclouds.googlecomputeengine.internal.BaseGoogleComputeEngineApiExpectTest;
-import org.jclouds.googlecomputeengine.options.FirewallOptions;
-import org.jclouds.googlecomputeengine.parse.ParseFirewallListTest;
-import org.jclouds.googlecomputeengine.parse.ParseFirewallTest;
-import org.jclouds.googlecomputeengine.parse.ParseOperationTest;
-import org.jclouds.http.HttpRequest;
-import org.jclouds.http.HttpResponse;
-import org.jclouds.io.Payload;
-import org.testng.annotations.Test;
-
-import javax.ws.rs.core.MediaType;
-import java.io.IOException;
-import java.net.URI;
-import java.util.Set;
-
 import static com.google.common.base.Joiner.on;
 import static com.google.common.collect.Iterables.transform;
 import static java.lang.String.format;
@@ -49,6 +31,26 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 import static org.testng.AssertJUnit.assertNull;
 
+import java.io.IOException;
+import java.net.URI;
+import java.util.Set;
+
+import javax.ws.rs.core.MediaType;
+
+import org.jclouds.googlecomputeengine.domain.Firewall;
+import org.jclouds.googlecomputeengine.internal.BaseGoogleComputeEngineApiExpectTest;
+import org.jclouds.googlecomputeengine.options.FirewallOptions;
+import org.jclouds.googlecomputeengine.parse.ParseFirewallListTest;
+import org.jclouds.googlecomputeengine.parse.ParseFirewallTest;
+import org.jclouds.googlecomputeengine.parse.ParseOperationTest;
+import org.jclouds.http.HttpRequest;
+import org.jclouds.http.HttpResponse;
+import org.jclouds.io.Payload;
+import org.testng.annotations.Test;
+
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableSet;
+
 /**
  * @author David Alves
  */
@@ -59,7 +61,7 @@ public class FirewallApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
            .builder()
            .method("GET")
            .endpoint("https://www.googleapis" +
-                   ".com/compute/v1beta13/projects/myproject/firewalls/jclouds-test")
+                   ".com/compute/v1beta15/projects/myproject/global/firewalls/jclouds-test")
            .addHeader("Accept", "application/json")
            .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -109,7 +111,7 @@ public class FirewallApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
               .builder()
               .method("GET")
               .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/firewalls/jclouds-test")
+                      ".com/compute/v1beta15/projects/myproject/global/firewalls/jclouds-test")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -126,7 +128,7 @@ public class FirewallApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
       HttpRequest request = HttpRequest
               .builder()
               .method("POST")
-              .endpoint("https://www.googleapis.com/compute/v1beta13/projects/myproject/firewalls")
+              .endpoint("https://www.googleapis.com/compute/v1beta15/projects/myproject/global/firewalls")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN)
               .payload(firewallPayloadFirewallOfName(
@@ -145,7 +147,7 @@ public class FirewallApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
               TOKEN_RESPONSE, request, insertFirewallResponse).getFirewallApiForProject("myproject");
 
       assertEquals(api.createInNetwork("myfw", URI.create("https://www.googleapis" +
-              ".com/compute/v1beta13/projects/myproject/networks/default"),
+              ".com/compute/v1beta15/projects/myproject/global/networks/default"),
               new FirewallOptions()
                       .addAllowedRule(Firewall.Rule.builder()
                               .IPProtocol(IPProtocol.TCP)
@@ -161,7 +163,7 @@ public class FirewallApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
       HttpRequest update = HttpRequest
               .builder()
               .method("PUT")
-              .endpoint("https://www.googleapis.com/compute/v1beta13/projects/myproject/firewalls/myfw")
+              .endpoint("https://www.googleapis.com/compute/v1beta15/projects/myproject/global/firewalls/myfw")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN)
               .payload(firewallPayloadFirewallOfName(
@@ -184,7 +186,7 @@ public class FirewallApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
               new FirewallOptions()
                       .name("myfw")
                       .network(URI.create("https://www.googleapis" +
-                              ".com/compute/v1beta13/projects/myproject/networks/default"))
+                              ".com/compute/v1beta15/projects/myproject/global/networks/default"))
                       .addAllowedRule(Firewall.Rule.builder()
                               .IPProtocol(IPProtocol.TCP)
                               .addPort(22)
@@ -198,7 +200,7 @@ public class FirewallApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
       HttpRequest update = HttpRequest
               .builder()
               .method("PATCH")
-              .endpoint("https://www.googleapis.com/compute/v1beta13/projects/myproject/firewalls/myfw")
+              .endpoint("https://www.googleapis.com/compute/v1beta15/projects/myproject/global/firewalls/myfw")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN)
               .payload(firewallPayloadFirewallOfName(
@@ -221,7 +223,7 @@ public class FirewallApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
               new FirewallOptions()
                       .name("myfw")
                       .network(URI.create("https://www.googleapis" +
-                              ".com/compute/v1beta13/projects/myproject/networks/default"))
+                              ".com/compute/v1beta15/projects/myproject/global/networks/default"))
                       .addAllowedRule(Firewall.Rule.builder()
                               .IPProtocol(IPProtocol.TCP)
                               .addPort(22)
@@ -236,7 +238,7 @@ public class FirewallApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
               .builder()
               .method("DELETE")
               .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/firewalls/default-allow-internal")
+                      ".com/compute/v1beta15/projects/myproject/global/firewalls/default-allow-internal")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -255,7 +257,7 @@ public class FirewallApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
               .builder()
               .method("DELETE")
               .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/firewalls/default-allow-internal")
+                      ".com/compute/v1beta15/projects/myproject/global/firewalls/default-allow-internal")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -272,7 +274,7 @@ public class FirewallApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
               .builder()
               .method("GET")
               .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/firewalls")
+                      ".com/compute/v1beta15/projects/myproject/global/firewalls")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 
@@ -291,7 +293,7 @@ public class FirewallApiExpectTest extends BaseGoogleComputeEngineApiExpectTest 
               .builder()
               .method("GET")
               .endpoint("https://www.googleapis" +
-                      ".com/compute/v1beta13/projects/myproject/firewalls")
+                      ".com/compute/v1beta15/projects/myproject/global/firewalls")
               .addHeader("Accept", "application/json")
               .addHeader("Authorization", "Bearer " + TOKEN).build();
 

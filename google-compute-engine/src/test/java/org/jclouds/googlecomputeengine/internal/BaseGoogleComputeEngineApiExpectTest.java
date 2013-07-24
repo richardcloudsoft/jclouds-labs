@@ -18,9 +18,9 @@
  */
 package org.jclouds.googlecomputeengine.internal;
 
-import org.jclouds.googlecomputeengine.GoogleComputeEngineApi;
-
 import java.util.Properties;
+
+import org.jclouds.googlecomputeengine.GoogleComputeEngineApi;
 
 /**
  * @author Adrian Cole

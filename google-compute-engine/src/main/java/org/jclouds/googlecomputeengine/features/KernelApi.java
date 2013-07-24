@@ -50,7 +50,7 @@ import org.jclouds.rest.annotations.Transform;
  * Provides access to Kernels via their REST API.
  *
  * @author David Alves
- * @see <a href="https://developers.google.com/compute/docs/reference/v1beta13/kernels"/>
+ * @see <a href="https://developers.google.com/compute/docs/reference/v1beta15/kernels"/>
  */
 @SkipEncoding({'/', '='})
 @RequestFilters(OAuthAuthenticator.class)
@@ -65,7 +65,7 @@ public interface KernelApi {
     */
    @Named("Kernels:get")
    @GET
-   @Path("/kernels/{kernel}")
+   @Path("/global/kernels/{kernel}")
    @OAuthScopes(COMPUTE_READONLY_SCOPE)
    @Fallback(NullOnNotFoundOr404.class)
    Kernel get(@PathParam("kernel") String kernelName);
@@ -75,7 +75,7 @@ public interface KernelApi {
     */
    @Named("Kernels:list")
    @GET
-   @Path("/kernels")
+   @Path("/global/kernels")
    @OAuthScopes(COMPUTE_READONLY_SCOPE)
    @ResponseParser(ParseKernels.class)
    @Fallback(EmptyIterableWithMarkerOnNotFoundOr404.class)
@@ -86,7 +86,7 @@ public interface KernelApi {
     */
    @Named("Kernels:list")
    @GET
-   @Path("/kernels")
+   @Path("/global/kernels")
    @OAuthScopes(COMPUTE_READONLY_SCOPE)
    @ResponseParser(ParseKernels.class)
    @Fallback(EmptyIterableWithMarkerOnNotFoundOr404.class)
@@ -105,19 +105,19 @@ public interface KernelApi {
     */
    @Named("Kernels:list")
    @GET
-   @Path("/kernels")
+   @Path("/global/kernels")
    @OAuthScopes(COMPUTE_READONLY_SCOPE)
    @ResponseParser(ParseKernels.class)
    @Fallback(EmptyIterableWithMarkerOnNotFoundOr404.class)
    ListPage<Kernel> listAtMarker(@QueryParam("pageToken") @Nullable String marker,
-                                                   ListOptions listOptions);
+                                 ListOptions listOptions);
 
    /**
     * @see KernelApi#list(org.jclouds.googlecomputeengine.options.ListOptions)
     */
    @Named("Kernels:list")
    @GET
-   @Path("/kernels")
+   @Path("/global/kernels")
    @OAuthScopes(COMPUTE_READONLY_SCOPE)
    @ResponseParser(ParseKernels.class)
    @Transform(ParseKernels.ToPagedIterable.class)
@@ -133,7 +133,7 @@ public interface KernelApi {
     */
    @Named("Kernels:list")
    @GET
-   @Path("/kernels")
+   @Path("/global/kernels")
    @OAuthScopes(COMPUTE_READONLY_SCOPE)
    @ResponseParser(ParseKernels.class)
    @Transform(ParseKernels.ToPagedIterable.class)

@@ -19,6 +19,11 @@
 
 package org.jclouds.googlecomputeengine.features;
 
+import static org.jclouds.googlecomputeengine.GoogleComputeEngineConstants.COMPUTE_READONLY_SCOPE;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
+
 import org.jclouds.googlecomputeengine.internal.BaseGoogleComputeEngineApiExpectTest;
 import org.jclouds.googlecomputeengine.parse.ParseZoneListTest;
 import org.jclouds.googlecomputeengine.parse.ParseZoneTest;
@@ -26,18 +31,13 @@ import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
 import org.testng.annotations.Test;
 
-import static org.jclouds.googlecomputeengine.GoogleComputeEngineConstants.COMPUTE_READONLY_SCOPE;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertTrue;
-
 /**
  * @author David Alves
  */
 @Test(groups = "unit")
 public class ZoneApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
 
-   public static final String ZONES_URL_PREFIX = "https://www.googleapis.com/compute/v1beta13/projects/myproject/zones";
+   public static final String ZONES_URL_PREFIX = "https://www.googleapis.com/compute/v1beta15/projects/myproject/zones";
 
    public static final HttpRequest GET_ZONE_REQ = HttpRequest
            .builder()
@@ -53,9 +53,11 @@ public class ZoneApiExpectTest extends BaseGoogleComputeEngineApiExpectTest {
            .addHeader("Accept", "application/json")
            .addHeader("Authorization", "Bearer " + TOKEN).build();
 
+   public static final HttpResponse LIST_ZONES_SHORT_RESPONSE = HttpResponse.builder().statusCode(200)
+           .payload(staticPayloadFromResource("/zone_list_short.json")).build();
+
    public static final HttpResponse LIST_ZONES_RESPONSE = HttpResponse.builder().statusCode(200)
            .payload(staticPayloadFromResource("/zone_list.json")).build();
-
 
    public void testGetZoneResponseIs2xx() throws Exception {
 

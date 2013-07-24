@@ -61,7 +61,7 @@ public class GoogleComputeEngineServiceLiveTest extends BaseComputeServiceLiveTe
    @Test(enabled = true, dependsOnMethods = "testReboot")
    public void testSuspendResume() throws Exception {
    }
-   
+
    @Test(enabled = true, dependsOnMethods = "testSuspendResume")
    public void testListNodesByIds() throws Exception {
       super.testGetNodesWithDetails();
@@ -79,7 +79,7 @@ public class GoogleComputeEngineServiceLiveTest extends BaseComputeServiceLiveTe
       super.testListNodes();
    }
 
-   @Test(enabled = true, dependsOnMethods = { "testListNodes", "testGetNodesWithDetails", "testListNodesByIds" })
+   @Test(enabled = true, dependsOnMethods = {"testListNodes", "testGetNodesWithDetails", "testListNodesByIds"})
    @Override
    public void testDestroyNodes() {
       super.testDestroyNodes();

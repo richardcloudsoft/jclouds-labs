@@ -19,8 +19,10 @@
 
 package org.jclouds.googlecomputeengine.functions.internal;
 
-import com.google.common.base.Function;
-import com.google.inject.TypeLiteral;
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import javax.inject.Inject;
+
 import org.jclouds.collect.IterableWithMarker;
 import org.jclouds.googlecomputeengine.GoogleComputeEngineApi;
 import org.jclouds.googlecomputeengine.domain.Kernel;
@@ -29,9 +31,8 @@ import org.jclouds.googlecomputeengine.options.ListOptions;
 import org.jclouds.http.functions.ParseJson;
 import org.jclouds.json.Json;
 
-import javax.inject.Inject;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.base.Function;
+import com.google.inject.TypeLiteral;
 
 /**
  * @author David Alves
@@ -40,7 +41,8 @@ public class ParseKernels extends ParseJson<ListPage<Kernel>> {
 
    @Inject
    public ParseKernels(Json json) {
-      super(json, new TypeLiteral<ListPage<Kernel>>() {});
+      super(json, new TypeLiteral<ListPage<Kernel>>() {
+      });
    }
 
    public static class ToPagedIterable extends BaseToPagedIterable<Kernel, ToPagedIterable> {
